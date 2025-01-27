@@ -4,14 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.thinking-tester</groupId>
+    <groupId>com.thinking-tester-contact-list.herokuapp</groupId>
     <artifactId>thinking_tester_atf</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>22</maven.compiler.source>
         <maven.compiler.target>22</maven.compiler.target>
-        <selenium.version>4.21.0</selenium.version>
+        <selenium.version>4.27.0</selenium.version>
         <cucumber.version>7.16.1</cucumber.version>
         <cucumber-junit.version>7.16.1</cucumber-junit.version>
         <log4j-api.version>2.23.1</log4j-api.version>
@@ -28,6 +28,7 @@
         <hibernate-core>6.5.2.Final</hibernate-core>
         <mysql-connector-java>8.0.33</mysql-connector-java>
         <jbcrypt>0.4</jbcrypt>
+        <annotations.version>26.0.1</annotations.version>
     </properties>
 
     <dependencies>
@@ -99,11 +100,10 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>RELEASE</version>
-            <scope>compile</scope>
+            <version>${annotations.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.hibernate </groupId>
+            <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>${hibernate-core}</version>
         </dependency>
@@ -165,5 +165,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

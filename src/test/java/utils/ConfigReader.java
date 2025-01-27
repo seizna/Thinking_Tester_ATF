@@ -17,15 +17,7 @@ public class ConfigReader {
         }
     }
 
-    public static String getEnvVariable(String key) {
-        return System.getenv(key);
-    }
-
     public String getUrl(String key) {
         return properties.getProperty(key);
-    }
-
-    public long getTimeout(String key) {
-        return Long.parseLong(properties.getProperty(key));
     }
 }
