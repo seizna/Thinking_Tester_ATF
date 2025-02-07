@@ -68,5 +68,11 @@ public class LoginPage {
     public WebElement waitForValidationMessage() {
         return WebDriverManager.getWait().until(ExpectedConditions.visibilityOf(validationMessage));
     }
+
+    public void loginUser(String email, String password) {
+        setEmail(email);
+        setPassword(password);
+        clickSubmitButton();
+    }
 }
 
