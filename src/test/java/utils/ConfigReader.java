@@ -6,18 +6,18 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class ConfigReader {
-    private final Properties properties;
+    private final Properties PROPERTIES;
 
     public ConfigReader() {
-        properties = new Properties();
-        try (InputStream input = new FileInputStream("src/test/resources/config.properties")) {
-            properties.load(input);
+        PROPERTIES = new Properties();
+        try (InputStream input = new FileInputStream("src/test/resources/config.PROPERTIES")) {
+            PROPERTIES.load(input);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
     public String getUrl(String key) {
-        return properties.getProperty(key);
+        return PROPERTIES.getProperty(key);
     }
 }

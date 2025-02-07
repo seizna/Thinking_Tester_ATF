@@ -91,23 +91,12 @@ public class AddUserPage {
         return WebDriverManager.getWait().until(ExpectedConditions.visibilityOf(validationMessage));
     }
 
-
    public void registerUser(String firstName, String lastName, String email, String password) {
         setFirstName(firstName);
         setLastName(lastName);
-
-        if (email.equals("uniqueEmail")) {
-            email = generateUniqueEmail();
-            setEmail(email);
-        } else {
-            setEmail(email);
-        }
+        setEmail(email);
         setPassword(password);
         clickSubmitButton();
-    }
-
-    private String generateUniqueEmail() {
-        return "user_" + System.currentTimeMillis() + "@sena.com";
     }
 }
 

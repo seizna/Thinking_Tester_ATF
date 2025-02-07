@@ -7,13 +7,13 @@ Feature: User Registration
     And User is redirected to Add User page
     And All UI elements are displayed on Add User page
 
-  @UI @DB
+  @UI @DB @TakeScreenshot
   Scenario: Successful User Registration
     When User registers with First Name: Jane, Last Name: Doe, Email: uniqueEmail and Password: TestUserRegistration1!
     Then User is redirected to Contact List page
     And User with email under test is present in DB
 
-  @UI
+  @UI @TakeScreenshot
   Scenario Outline: Verify system validates user input on Add User page
     When User registers with First Name: <first name>, Last Name: <last name>, Email: <email> and Password: <password>
     Then <Validation message> is displayed on Add User page
@@ -26,3 +26,4 @@ Feature: User Registration
       | Jane                   | Doe                    | Jane.Doe@sena.com | JaneDoe                                                                                               | Email address is already in use                                                                                                                                                                              |
       | CheckMaximumCharacters | Doe                    | Jane.Doe@sena.com | JaneDoe                                                                                               | User validation failed: firstName: Path `firstName` (`CheckMaximumCharacters`) is longer than the maximum allowed length (20).                                                                               |
       | Jane                   | CheckMaximumCharacters | Jane.Doe@sena.com | JaneDoe                                                                                               | User validation failed: lastName: Path `lastName` (`CheckMaximumCharacters`) is longer than the maximum allowed length (20).                                                                                 |
+

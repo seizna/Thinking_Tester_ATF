@@ -9,26 +9,26 @@ import java.time.Duration;
 
 public class WebDriverManager {
     private static WebDriverManager manager;
-    private final WebDriver driver;
+    private final WebDriver DRIVER;
     private static WebDriverWait wait;
 
     private WebDriverManager() {
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        DRIVER = new ChromeDriver();
+        DRIVER.manage().window().maximize();
+        DRIVER.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        wait = new WebDriverWait(DRIVER, Duration.ofSeconds(10));
     }
 
     public static WebDriver getDriver() {
         if (manager == null) {
             manager = new WebDriverManager();
         }
-        return manager.driver;
+        return manager.DRIVER;
     }
 
     public static void closeDriver() {
         if (manager != null) {
-            manager.driver.quit();
+            manager.DRIVER.quit();
             manager = null;
         }
     }

@@ -1,8 +1,11 @@
-package hooks;
+package stepdefinitions;
 
 import driversetup.WebDriverManager;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -11,62 +14,53 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import pageobjects.AddUserPage;
 import pageobjects.ContactListPage;
 import pageobjects.LoginPage;
-import scenariocontext.ContextKey;
-import scenariocontext.ScenarioContext;
-import stepdefinitions.DbSteps;
 import utils.ConfigReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import static org.junit.Assert.assertTrue;
 
-public class PreconditionSteps {
+public class SharedSteps {
 
-    private final WebDriver driver = WebDriverManager.getDriver();
-    LoginPage loginPage = new LoginPage(driver);
-    AddUserPage addUserPage = new AddUserPage(driver);
-    ContactListPage contactListPage = new ContactListPage(driver);
+    private final Logger LOGGER = LogManager.getLogger(SharedSteps.class);
+    private final WebDriver DRIVER = WebDriverManager.getDriver();
+    LoginPage loginPage = new LoginPage(DRIVER);
+    AddUserPage addUserPage = new AddUserPage(DRIVER);
+    ContactListPage contactListPage = new ContactListPage(DRIVER);
     ConfigReader configReader = new ConfigReader();
-    DbSteps dbSteps = new DbSteps();
 
     @Given("User navigates to the Login page")
     public void navigateToLoginPage() {
-        driver.navigate().to(configReader.getUrl("login.url"));
-        System.out.println("Login page accessed");
+        DRIVER.navigate().to(configReader.getUrl("login.url"));
+        LOGGER.info("Login page accessed.");
     }
 
     @And("User clicks [Sign up] button")
     public void clickSignUp() {
         loginPage.signUpButton();
+        LOGGER.info("User clicked sign up button.");
     }
 
-    @And("User is redirected to {} page")
+    @Then("User is redirected to {} page")
     public void checkUserRedirectToExpectedPage(String pageTitle) {
-        checkRedirect(pageTitle);
-        if (pageTitle.equals("Contact List")) {
-            dbSteps.insertRegisteredUser(ScenarioContext.getContext(ContextKey.EMAIL).toString()
-                    , ScenarioContext.getContext(ContextKey.ENCRYPTED_PASSWORD).toString()
-                    , ScenarioContext.getContext(ContextKey.FIRST_NAME).toString()
-                    , ScenarioContext.getContext(ContextKey.LAST_NAME).toString());
-        }
-    }
-
-    public void checkRedirect(String pageTitle) {
         String expectedPageTitle = getExpectedPageTitle(pageTitle);
 
         if (expectedPageTitle == null) {
+            LOGGER.error("Unknown page title: {}", pageTitle);
             throw new IllegalArgumentException("Unknown page: " + pageTitle);
         }
 
         try {
+            LOGGER.debug("Waiting for user to be redirected to '{}' page", expectedPageTitle);
             WebDriverManager.getWait().until(ExpectedConditions.titleIs(expectedPageTitle));
         } catch (TimeoutException ex) {
-            System.err.println("Timeout waiting for user to be redirected to " + expectedPageTitle);
+            LOGGER.error("Timeout waiting for user to be redirected to '{}' page", expectedPageTitle, ex);
         }
 
-        String currentPageTitle = driver.getTitle();
+        String currentPageTitle = DRIVER.getTitle();
         Assert.assertEquals("User is not redirected to the expected page: " + expectedPageTitle, expectedPageTitle, currentPageTitle);
-        System.out.println("User is redirected to the expected page: " + currentPageTitle);
+        LOGGER.info("User is successfully redirected to the expected page: {}.", currentPageTitle);
+
     }
 
     private String getExpectedPageTitle(String pageTitle) {
@@ -85,16 +79,21 @@ public class PreconditionSteps {
         Map<String, List<WebElement>> pageElements = getPageElements(pageName);
 
         if (pageElements.isEmpty()) {
+            LOGGER.error("No UI elements defined for page: {}", pageName);
             throw new IllegalArgumentException("No UI elements defined for page: " + pageName);
         }
 
         pageElements.forEach((elementDescription, elementsList) -> {
             elementsList.forEach(element -> {
+                if (!element.isDisplayed()) {
+                    LOGGER.warn("{} is not displayed on '{}' page", elementDescription, pageName);
+                } else {
+                    LOGGER.debug("{} is displayed on '{}' page", elementDescription, pageName);
+                }
                 assertTrue(elementDescription + " is not displayed", element.isDisplayed());
             });
         });
-
-        System.out.println(pageName + " page has all UI elements in place");
+        LOGGER.debug("All required UI elements are present on '{}' page.", pageName);
     }
 
     private Map<String, List<WebElement>> getPageElements(String pageName) {

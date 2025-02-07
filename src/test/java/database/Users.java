@@ -12,6 +12,10 @@ import java.time.LocalDateTime;
 public class Users {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, updatable = false)
+    private Long id;
+
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
@@ -26,8 +30,6 @@ public class Users {
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
-
-
 
 
     public String getEmail() {
