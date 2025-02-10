@@ -17,7 +17,7 @@ public class ContactListPage {
     @FindBy(id = "add-contact")
     private WebElement addContact;
 
-    @FindBy(xpath = "//body/div[1]/div[1]")
+    @FindBy(xpath = "//body/div[1]/div[1]/table[1]")
     private WebElement summaryTable;
 
 

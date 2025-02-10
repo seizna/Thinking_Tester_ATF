@@ -21,6 +21,7 @@ public class UiRegistrationSteps {
     AddUserPage addUserPage = new AddUserPage(DRIVER);
     DbSteps dbSteps = new DbSteps();
 
+
     @When("User registers with First Name: {}, Last Name: {}, Email: {} and Password: {}")
     public void registerNewUser(String firstName, String lastName, String email, String password) throws Exception {
 
