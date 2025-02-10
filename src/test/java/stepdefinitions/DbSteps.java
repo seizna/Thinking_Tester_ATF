@@ -16,7 +16,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.time.LocalDateTime;
 import java.util.Base64;
-
 import static scenariocontext.ScenarioContext.getContext;
 
 public class DbSteps {
@@ -76,6 +75,28 @@ public class DbSteps {
         } catch (NoResultException ex) {
             LOGGER.error("Something went wrong while retrieving last inserted user.");
             return null;
+        }
+    }
+
+    @And ("User with email under test is removed from DB")
+    public void deleteLastInsertedUser() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+
+        try {
+            Users lastUser = selectLastInsertedUser();
+            if (lastUser != null) {
+                session.remove(lastUser);
+                LOGGER.info("Successfully deleted last inserted user with email: {}", lastUser.getEmail());
+            } else {
+                LOGGER.warn("Users table has no records.");
+            }
+            transaction.commit();
+        } catch (Exception ex) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            LOGGER.error("Error occurred while deleting last inserted user: ", ex);
         }
     }
 

@@ -11,10 +11,10 @@ Feature: User Login
   Scenario Outline: Verify that system rejects login requests with invalid credentials
     Given User navigates to the Login page
     And All UI elements are displayed on Login page
-    When User attempts login with invalid <email> and <password>
+    When User attempts login with invalid <Email> and <Password>
     Then <Validation message> is displayed on Login page
     Examples:
-      | email                | password | Validation message             |
+      | Email                | Password | Validation message             |
       |                      |          | Incorrect username or password |
       | seiz.nadea@gmail.com |          | Incorrect username or password |
       |                      | QAZws1!  | Incorrect username or password |

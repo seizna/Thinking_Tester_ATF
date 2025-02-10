@@ -7,6 +7,8 @@ Feature: User Registration
     And User is redirected to Add User page
     And All UI elements are displayed on Add User page
 
+
+
   @UI @DB @TakeScreenshot
   Scenario: Successful User Registration
     When User registers with First Name: Jane, Last Name: Doe, Email: uniqueEmail and Password: TestUserRegistration1!
@@ -15,10 +17,10 @@ Feature: User Registration
 
   @UI @TakeScreenshot
   Scenario Outline: Verify system validates user input on Add User page
-    When User registers with First Name: <first name>, Last Name: <last name>, Email: <email> and Password: <password>
+    When User registers with First Name: <First Name>, Last Name: <Last Name>, Email: <Email> and Password: <Password>
     Then <Validation message> is displayed on Add User page
     Examples:
-      | first name             | last name              | email             | password                                                                                              | Validation message                                                                                                                                                                                           |
+      | First Name             | Last Name              | Email             | Password                                                                                              | Validation message                                                                                                                                                                                           |
       |                        |                        |                   |                                                                                                       | User validation failed: firstName: Path `firstName` is required., lastName: Path `lastName` is required., email: Email is invalid, password: Path `password` is required.                                    |
       |                        |                        | Jane.Doe@sena.com |                                                                                                       | User validation failed: firstName: Path `firstName` is required., lastName: Path `lastName` is required., password: Path `password` is required.                                                             |
       | Jane                   | Doe                    | Jane.Doe@sena.com | Jane!!                                                                                                | User validation failed: password: Path `password` (`Jane!!`) is shorter than the minimum allowed length (7).                                                                                                 |

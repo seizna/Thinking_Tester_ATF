@@ -20,9 +20,9 @@ import java.util.List;
 import java.util.Map;
 import static org.junit.Assert.assertTrue;
 
-public class SharedSteps {
+public class UiSharedSteps {
 
-    private final Logger LOGGER = LogManager.getLogger(SharedSteps.class);
+    private final Logger LOGGER = LogManager.getLogger(UiSharedSteps.class);
     private final WebDriver DRIVER = WebDriverManager.getDriver();
     LoginPage loginPage = new LoginPage(DRIVER);
     AddUserPage addUserPage = new AddUserPage(DRIVER);

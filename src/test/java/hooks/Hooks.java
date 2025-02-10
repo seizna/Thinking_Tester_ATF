@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+
 import java.io.ByteArrayInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -67,14 +68,14 @@ public class Hooks {
         byte[] screenshot = ((TakesScreenshot) WebDriverManager.getDriver()).getScreenshotAs(OutputType.BYTES);
         String fileName = UUID.randomUUID() + ".png";
         Path screenshotPath = Path.of("target/allure-results", fileName);
+
         try {
-            if (!Files.exists(screenshotPath)) {
-                Files.createDirectory(screenshotPath);
-            }
             Files.write(screenshotPath, screenshot);
+            if (Allure.getLifecycle().getCurrentTestCase().isPresent()) {
+                Allure.getLifecycle().addAttachment("Screenshot", "image/png", ".png", new ByteArrayInputStream(screenshot));
+            }
         } catch (Exception e){
             LOGGER.warn("Something went wrong while saving screenshot {}.", String.valueOf(e));
         }
-       Allure.getLifecycle().addAttachment("Screenshot", "image/png", ".png", new ByteArrayInputStream(screenshot));
     }
 }

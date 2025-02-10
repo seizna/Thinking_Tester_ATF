@@ -1,7 +1,6 @@
 package database;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 
 @Entity
