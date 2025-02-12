@@ -5,5 +5,6 @@ public enum ContextKey {
     LAST_NAME,
     EMAIL,
     RAW_PASSWORD,
-    ENCRYPTED_PASSWORD
+    ENCRYPTED_PASSWORD,
+    CREATED_CONTACT_NAME
 }

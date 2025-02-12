@@ -91,11 +91,12 @@ public class AddUserPage {
         return WebDriverManager.getWait().until(ExpectedConditions.visibilityOf(validationMessage));
     }
 
-   public void registerUser(String firstName, String lastName, String email, String password) {
+    public void registerUser(String firstName, String lastName, String email, String password) {
         setFirstName(firstName);
         setLastName(lastName);
         setEmail(email);
         setPassword(password);
+
         clickSubmitButton();
     }
 }

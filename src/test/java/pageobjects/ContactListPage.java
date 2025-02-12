@@ -25,7 +25,7 @@ public class ContactListPage {
         return logout;
     }
 
-    public void logoutButton() {
+    public void clickLogoutButton() {
         logout.click();
     }
 
@@ -33,7 +33,7 @@ public class ContactListPage {
         return addContact;
     }
 
-    public void addContactButton() {
+    public void clickAddContactButton() {
         addContact.click();
     }
 

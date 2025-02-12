@@ -57,7 +57,7 @@ public class LoginPage {
         return signUpButton;
     }
 
-    public void signUpButton() {
+    public void clickSignUpButton() {
         signUpButton.click();
     }
 
@@ -72,6 +72,7 @@ public class LoginPage {
     public void loginUser(String email, String password) {
         setEmail(email);
         setPassword(password);
+
         clickSubmitButton();
     }
 }

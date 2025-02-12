@@ -11,6 +11,7 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import pageobjects.AddEditContactPage;
 import pageobjects.AddUserPage;
 import pageobjects.ContactListPage;
 import pageobjects.LoginPage;
@@ -27,6 +28,7 @@ public class UiSharedSteps {
     LoginPage loginPage = new LoginPage(DRIVER);
     AddUserPage addUserPage = new AddUserPage(DRIVER);
     ContactListPage contactListPage = new ContactListPage(DRIVER);
+    AddEditContactPage addEditContactPage = new AddEditContactPage(DRIVER);
     ConfigReader configReader = new ConfigReader();
 
     @Given("User navigates to the Login page")
@@ -37,7 +39,7 @@ public class UiSharedSteps {
 
     @And("User clicks [Sign up] button")
     public void clickSignUp() {
-        loginPage.signUpButton();
+        loginPage.clickSignUpButton();
         LOGGER.info("User clicked sign up button.");
     }
 
@@ -59,7 +61,7 @@ public class UiSharedSteps {
 
         String currentPageTitle = DRIVER.getTitle();
         Assert.assertEquals("User is not redirected to the expected page: " + expectedPageTitle, expectedPageTitle, currentPageTitle);
-        LOGGER.info("User is successfully redirected to the expected page: {}.", currentPageTitle);
+        LOGGER.info("User is redirected to the expected page: {}.", currentPageTitle);
 
     }
 
@@ -119,7 +121,50 @@ public class UiSharedSteps {
                 elements.put("Submit button", List.of(addUserPage.getSubmitButton()));
                 elements.put("Cancel button", List.of(addUserPage.getCancelButton()));
             }
+            case "Add Contact" -> {
+                elements.put("First Name field", List.of(addEditContactPage.getFirstName(), addEditContactPage.getFirstNameAsterisk()));
+                elements.put("Last Name field", List.of(addEditContactPage.getLastName(), addEditContactPage.getLastNameAsterisk()));
+                elements.put("Date of Birth field", List.of(addEditContactPage.getDateOfBirth()));
+                elements.put("Email field", List.of(addEditContactPage.getEmail()));
+                elements.put("Phone field", List.of(addEditContactPage.getPhone()));
+                elements.put("Street Address 1 field", List.of(addEditContactPage.getStreetAddr1()));
+                elements.put("Street Address 2 field", List.of(addEditContactPage.getStreetAddr2()));
+                elements.put("City field", List.of(addEditContactPage.getCity()));
+                elements.put("State or Province field", List.of(addEditContactPage.getStateOrProvince()));
+                elements.put("Postal Code field", List.of(addEditContactPage.getPostalCode()));
+                elements.put("Country field", List.of(addEditContactPage.getCountry()));
+                elements.put("Submit button", List.of(addEditContactPage.getSubmitButton()));
+                elements.put("Cancel button", List.of(addEditContactPage.getCancelButton()));
+            }
         }
         return elements;
+    }
+
+    @Then("{} is displayed on {} page")
+    public void checkValidationMessage(String validationMessage, String pageName) {
+        WebElement validationMessageDisplayed;
+
+        switch (pageName) {
+            case "Login":
+                validationMessageDisplayed = loginPage.waitForValidationMessage();
+                break;
+            case "Add User":
+                validationMessageDisplayed = addUserPage.waitForValidationMessage();
+                break;
+            case "Add Contact":
+                validationMessageDisplayed = addEditContactPage.waitForValidationMessage();
+                break;
+            default:
+                LOGGER.error("Unexpected page name: {}", pageName);
+                throw new IllegalStateException("Unexpected value: " + pageName);
+        }
+        //TODO: never executed since wait fails with timeout
+        if (validationMessageDisplayed.isDisplayed()) {
+            LOGGER.warn("Validation message is displayed on '{}' page.", pageName);
+        } else {
+            LOGGER.warn("Validation message is NOT displayed on '{}' page.", pageName);
+        }
+        Assert.assertEquals("Unexpected validation message", validationMessage, validationMessageDisplayed.getText());
+        LOGGER.debug("Expected validation message '{}' matches the actual displayed message '{}'.", validationMessage, validationMessageDisplayed.getText());
     }
 }

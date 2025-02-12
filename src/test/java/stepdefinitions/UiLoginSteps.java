@@ -2,6 +2,7 @@ package stepdefinitions;
 
 import database.Users;
 import driversetup.WebDriverManager;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,6 +16,7 @@ public class UiLoginSteps {
     LoginPage loginPage = new LoginPage(DRIVER);
     DbSteps dbSteps = new DbSteps();
     Users users = new Users();
+
 
     @When("User logs in with valid email and password")
     public void loginUserWithValidCredentials() throws Exception {
