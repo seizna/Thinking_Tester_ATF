@@ -1,13 +1,7 @@
 Feature: User Registration
   
   Background:
-    Given User navigates to the Login page
-    And All UI elements are displayed on Login page
-    And User clicks [Sign up] button
-    And User is redirected to Add User page
-    And All UI elements are displayed on Add User page
-
-
+    Given User is on Add User page
 
   @UI @DB @TakeScreenshot
   Scenario: Successful User Registration

@@ -1,17 +1,16 @@
 package pageobjects;
 
 import driversetup.WebDriverManager;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-public class LoginPage {
+import static driversetup.WebDriverManager.getDriver;
 
-    public LoginPage(WebDriver driver) {
-        PageFactory.initElements(driver, this);
-    }
+public class LoginPage {
 
     @FindBy(id = "email")
     private WebElement email;
@@ -28,6 +27,9 @@ public class LoginPage {
     @FindBy(id = "error")
     private WebElement validationMessage;
 
+    public LoginPage() {
+        PageFactory.initElements(getDriver(), this);
+    }
 
     public WebElement getEmail() {
         return email;
@@ -57,16 +59,40 @@ public class LoginPage {
         return signUpButton;
     }
 
-    public void signUpButton() {
+    public void clickSignUpButton() {
         signUpButton.click();
     }
 
-    public WebElement getValidationMessage() {
-        return validationMessage;
+    public boolean isValidationMessageDisplayed() {
+        try {
+            return WebDriverManager.getWait().until(ExpectedConditions.visibilityOf(validationMessage)).isDisplayed();
+        } catch (TimeoutException | NoSuchElementException e) {
+            return false;
+        }
     }
 
-    public WebElement waitForValidationMessage() {
-        return WebDriverManager.getWait().until(ExpectedConditions.visibilityOf(validationMessage));
+    public String getValidationMessageText() {
+        if (isValidationMessageDisplayed()) {
+            return validationMessage.getText();
+        } else {
+            return "";
+        }
+    }
+
+    public boolean areAllLoginElementsDisplayed() {
+
+        WebElement[] loginElements = new WebElement[4];
+        loginElements[0] = getEmail();
+        loginElements[1] = getPassword();
+        loginElements[2] = getSubmitButton();
+        loginElements[3] = getSignUpButton();
+
+        for (WebElement loginElement : loginElements) {
+            if (loginElement == null || !loginElement.isDisplayed()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void loginUser(String email, String password) {

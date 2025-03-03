@@ -3,6 +3,7 @@ package driversetup;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.time.Duration;
 
 public class WebDriverManager {
@@ -14,7 +15,7 @@ public class WebDriverManager {
         DRIVER = new ChromeDriver();
         DRIVER.manage().window().maximize();
         DRIVER.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-        wait = new WebDriverWait(DRIVER, Duration.ofSeconds(10));
+        wait = new WebDriverWait(DRIVER, Duration.ofSeconds(5));
     }
 
     public static WebDriver getDriver() {

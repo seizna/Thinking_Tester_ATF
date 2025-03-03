@@ -1,66 +1,61 @@
 package stepdefinitions;
 
-import driversetup.WebDriverManager;
-import io.cucumber.java.en.And;
+import driversetup.BrowserActions;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import pageobjects.AddEditContactPage;
 import pageobjects.AddUserPage;
 import pageobjects.ContactListPage;
 import pageobjects.LoginPage;
 import utils.ConfigReader;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import static org.junit.Assert.assertTrue;
 
 public class UiSharedSteps {
 
-    private final Logger LOGGER = LogManager.getLogger(UiSharedSteps.class);
-    private final WebDriver DRIVER = WebDriverManager.getDriver();
-    LoginPage loginPage = new LoginPage(DRIVER);
-    AddUserPage addUserPage = new AddUserPage(DRIVER);
-    ContactListPage contactListPage = new ContactListPage(DRIVER);
-    ConfigReader configReader = new ConfigReader();
+    private final Logger LOG = LogManager.getLogger(UiSharedSteps.class);
+    LoginPage loginPage = new LoginPage();
+    AddUserPage addUserPage = new AddUserPage();
+    ContactListPage contactListPage = new ContactListPage();
+    AddEditContactPage addEditContactPage = new AddEditContactPage();
+    BrowserActions browserActions = new BrowserActions();
+
 
     @Given("User navigates to the Login page")
     public void navigateToLoginPage() {
-        DRIVER.navigate().to(configReader.getUrl("login.url"));
-        LOGGER.info("Login page accessed.");
-    }
-
-    @And("User clicks [Sign up] button")
-    public void clickSignUp() {
-        loginPage.signUpButton();
-        LOGGER.info("User clicked sign up button.");
+        try {
+            String expectedTitle = "Contact List App";
+            browserActions.navigateTo(ConfigReader.getProperty("login.url"));
+            String actualTitle = browserActions.getPageTitle();
+            Assert.assertEquals("Login page title mismatch.", expectedTitle, actualTitle);
+        } catch (Exception ex) {
+            LOG.error("Failed to navigate to Login page:" + ex.getMessage());
+            throw ex;
+        }
     }
 
     @Then("User is redirected to {} page")
-    public void checkUserRedirectToExpectedPage(String pageTitle) {
-        String expectedPageTitle = getExpectedPageTitle(pageTitle);
+    public void checkUserRedirectToExpectedPage(String scenarioPageTitle) {
+        String expectedPageTitle = getExpectedPageTitle(scenarioPageTitle);
 
         if (expectedPageTitle == null) {
-            LOGGER.error("Unknown page title: {}", pageTitle);
-            throw new IllegalArgumentException("Unknown page: " + pageTitle);
+            LOG.error("Unknown page title: {}", scenarioPageTitle);
+            throw new IllegalArgumentException("Unknown page: " + scenarioPageTitle);
         }
 
         try {
-            LOGGER.debug("Waiting for user to be redirected to '{}' page", expectedPageTitle);
-            WebDriverManager.getWait().until(ExpectedConditions.titleIs(expectedPageTitle));
+            LOG.debug("Waiting for page title to be '{}'", expectedPageTitle);
+            browserActions.waitForPageToLoad(expectedPageTitle);
         } catch (TimeoutException ex) {
-            LOGGER.error("Timeout waiting for user to be redirected to '{}' page", expectedPageTitle, ex);
+            LOG.error("Timeout waiting for user to be redirected to '{}' page", expectedPageTitle, ex);
         }
 
-        String currentPageTitle = DRIVER.getTitle();
+        String currentPageTitle = browserActions.getPageTitle();
         Assert.assertEquals("User is not redirected to the expected page: " + expectedPageTitle, expectedPageTitle, currentPageTitle);
-        LOGGER.info("User is successfully redirected to the expected page: {}.", currentPageTitle);
-
     }
 
     private String getExpectedPageTitle(String pageTitle) {
@@ -74,52 +69,55 @@ public class UiSharedSteps {
         return expectedPageMap.get(pageTitle);
     }
 
-    @And("All UI elements are displayed on {} page")
     public void checkUiElements(String pageName) {
-        Map<String, List<WebElement>> pageElements = getPageElements(pageName);
-
-        if (pageElements.isEmpty()) {
-            LOGGER.error("No UI elements defined for page: {}", pageName);
-            throw new IllegalArgumentException("No UI elements defined for page: " + pageName);
-        }
-
-        pageElements.forEach((elementDescription, elementsList) -> {
-            elementsList.forEach(element -> {
-                if (!element.isDisplayed()) {
-                    LOGGER.warn("{} is not displayed on '{}' page", elementDescription, pageName);
-                } else {
-                    LOGGER.debug("{} is displayed on '{}' page", elementDescription, pageName);
-                }
-                assertTrue(elementDescription + " is not displayed", element.isDisplayed());
-            });
-        });
-        LOGGER.debug("All required UI elements are present on '{}' page.", pageName);
-    }
-
-    private Map<String, List<WebElement>> getPageElements(String pageName) {
-        Map<String, List<WebElement>> elements = new HashMap<>();
+        boolean arePageElementsDisplayed = false;
 
         switch (pageName) {
-            case "Login" -> {
-                elements.put("Email field", List.of(loginPage.getEmail()));
-                elements.put("Password field", List.of(loginPage.getPassword()));
-                elements.put("Submit button", List.of(loginPage.getSubmitButton()));
-                elements.put("Sign up button", List.of(loginPage.getSignUpButton()));
-            }
-            case "Contact List" -> {
-                elements.put("Logout button", List.of(contactListPage.getLogoutButton()));
-                elements.put("Add Contact button", List.of(contactListPage.getAddContactButton()));
-                elements.put("Summary Table", List.of(contactListPage.getSummaryTable()));
-            }
-            case "Add User" -> {
-                elements.put("First Name field", List.of(addUserPage.getFirstName()));
-                elements.put("Last Name field", List.of(addUserPage.getLastName()));
-                elements.put("Email field", List.of(addUserPage.getEmail()));
-                elements.put("Password field", List.of(addUserPage.getPassword()));
-                elements.put("Submit button", List.of(addUserPage.getSubmitButton()));
-                elements.put("Cancel button", List.of(addUserPage.getCancelButton()));
-            }
+            case "Login":
+                arePageElementsDisplayed = loginPage.areAllLoginElementsDisplayed();
+                break;
+            case "Contact List":
+                arePageElementsDisplayed = contactListPage.areAllContactListElementsDisplayed();
+                break;
+            case "Add User":
+                arePageElementsDisplayed = addUserPage.areAllAddUserElementsDisplayed();
+                break;
+            case "Add Contact":
+                arePageElementsDisplayed = addEditContactPage.areAllContactElementsDisplayed();
+                break;
         }
-        return elements;
+        if (arePageElementsDisplayed) {
+            LOG.debug("All required UI elements are present on '{}' page.", pageName);
+        } else {
+            LOG.error("Missing required UI element(s) on '{}' page.", pageName);
+        }
+    }
+
+    @Then("{} is displayed on {} page")
+    public void checkValidationMessage(String expectedValidationMessage, String pageName) {
+        String actualValidationMessage;
+
+        switch (pageName) {
+            case "Login":
+                actualValidationMessage = loginPage.getValidationMessageText();
+                break;
+            case "Add User":
+                actualValidationMessage = addUserPage.getValidationMessageText();
+                break;
+            case "Add Contact":
+                actualValidationMessage = addEditContactPage.getValidationMessageText();
+                break;
+            default:
+                LOG.error("Unexpected page name: {}", pageName);
+                throw new IllegalStateException("Unexpected value: " + pageName);
+        }
+        if (actualValidationMessage.isEmpty()) {
+            LOG.warn("Validation message is NOT displayed on '{}' page.", pageName);
+        } else {
+            LOG.info("Validation message '{}' is displayed on '{}' page.", expectedValidationMessage, pageName);
+        }
+
+        Assert.assertEquals("Unexpected validation message", expectedValidationMessage, actualValidationMessage);
+        LOG.debug("Expected validation message '{}' matches the actual message displayed {}'.", expectedValidationMessage, actualValidationMessage);
     }
 }

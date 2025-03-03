@@ -7,7 +7,7 @@ import org.hibernate.cfg.Configuration;
 
 public class HibernateUtil {
 
-    private final Logger LOGGER = LogManager.getLogger(HibernateUtil.class);
+    private final Logger LOG = LogManager.getLogger(HibernateUtil.class);
     private static HibernateUtil instance;
     private SessionFactory sessionFactory;
 
@@ -17,9 +17,9 @@ public class HibernateUtil {
             Configuration config = new Configuration();
             config.configure("hibernate.cfg.xml");
             sessionFactory = config.buildSessionFactory();
-            LOGGER.debug("SessionFactory initialized successfully.");
+            LOG.debug("SessionFactory initialized successfully.");
         } catch (Throwable ex) {
-            LOGGER.error("Error initializing SessionFactory: {}.", ex.getMessage());
+            LOG.error("Error initializing SessionFactory: {}.", ex.getMessage());
             throw new ExceptionInInitializerError(ex);
         }
     }
