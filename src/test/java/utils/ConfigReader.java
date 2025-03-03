@@ -1,23 +1,29 @@
 package utils;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 public class ConfigReader {
-    private final Properties PROPERTIES;
+    private final Logger LOG = LogManager.getLogger(ConfigReader.class);
+    private final Properties PROPERTIES = new Properties();
+    private static ConfigReader configReader;
 
-    public ConfigReader() {
-        PROPERTIES = new Properties();
-        try (InputStream input = new FileInputStream("src/test/resources/config.PROPERTIES")) {
+    private ConfigReader() {
+        try (InputStream input = new FileInputStream("src/test/resources/config.properties")) {
             PROPERTIES.load(input);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            LOG.error("Error reading properties file: " + ex.getMessage());
         }
     }
 
-    public String getUrl(String key) {
-        return PROPERTIES.getProperty(key);
+    public static String getProperty(String key) {
+        if (configReader == null) {
+            configReader = new ConfigReader();
+        }
+        return configReader.PROPERTIES.getProperty(key);
     }
 }

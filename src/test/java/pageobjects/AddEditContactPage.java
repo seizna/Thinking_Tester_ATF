@@ -1,17 +1,16 @@
 package pageobjects;
 
 import driversetup.WebDriverManager;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-public class AddEditContactPage {
+import static driversetup.WebDriverManager.getDriver;
 
-    public AddEditContactPage(WebDriver driver) {
-        PageFactory.initElements(driver, this);
-    }
+public class AddEditContactPage {
 
     @FindBy(id = "firstName")
     private WebElement firstName;
@@ -61,6 +60,9 @@ public class AddEditContactPage {
     @FindBy(id = "error")
     private WebElement validationMessage;
 
+    public AddEditContactPage() {
+        PageFactory.initElements(getDriver(), this);
+    }
 
     public WebElement getFirstName() {
         return firstName;
@@ -182,12 +184,47 @@ public class AddEditContactPage {
         cancelButton.click();
     }
 
-    public WebElement getValidationMessage() {
-        return validationMessage;
+    public boolean isValidationMessageDisplayed() {
+        try {
+            return WebDriverManager.getWait().until(ExpectedConditions.visibilityOf(validationMessage)).isDisplayed();
+        } catch (TimeoutException | NoSuchElementException e) {
+            return false;
+        }
     }
 
-    public WebElement waitForValidationMessage() {
-        return WebDriverManager.getWait().until(ExpectedConditions.visibilityOf(validationMessage));
+    public String getValidationMessageText() {
+        if (isValidationMessageDisplayed()) {
+            return validationMessage.getText();
+        } else {
+            return "";
+        }
+    }
+
+    public boolean areAllContactElementsDisplayed() {
+
+        WebElement[] contactElements = new WebElement[15];
+        contactElements[0] = getFirstName();
+        contactElements[1] = getFirstNameAsterisk();
+        contactElements[2] = getLastName();
+        contactElements[3] = getLastNameAsterisk();
+        contactElements[4] = getDateOfBirth();
+        contactElements[5] = getEmail();
+        contactElements[6] = getPhone();
+        contactElements[7] = getStreetAddr1();
+        contactElements[8] = getStreetAddr2();
+        contactElements[9] = getCity();
+        contactElements[10] = getStateOrProvince();
+        contactElements[11] = getPostalCode();
+        contactElements[12] = getCountry();
+        contactElements[13] = getSubmitButton();
+        contactElements[14] = getCancelButton();
+
+        for (WebElement contactElement : contactElements) {
+            if (contactElement == null || !contactElement.isDisplayed()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void addContact(String firstName, String lastName) {

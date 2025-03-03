@@ -3,7 +3,7 @@ Feature: Add Contact
   Background:
     Given User is on Add Contact page
 
-  @UI
+  @UI @TakeScreenshot
   Scenario Outline: Check that user can add a contact providing valid data in required fields only
     When User adds contact providing <valid Contact Details>
     Then User is redirected to Contact List page
@@ -14,7 +14,7 @@ Feature: Add Contact
       | John, Doe, , test@email.com, 1234567890, , , , Chisinau, 2045, Moldova                                             | John Doe    |
       | John, Smith, 2003-11-26, test@email.com, 1234567890, Test Drive 1, Test Drive 2, Chisinau, Chisinau, 2045, Moldova | John Smith  |
 
-  @UI
+  @UI @TakeScreenshot
   Scenario Outline: Verify system validates user input on Add Contact page
     When User adds contact providing <invalid Contact Details>
     Then <Validation message> is displayed on Add Contact page

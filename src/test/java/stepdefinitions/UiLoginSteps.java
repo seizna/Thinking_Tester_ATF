@@ -1,36 +1,44 @@
 package stepdefinitions;
 
+import database.DbActions;
 import database.Users;
-import driversetup.WebDriverManager;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.WebDriver;
 import pageobjects.LoginPage;
+import utils.EncryptionUtils;
 
 public class UiLoginSteps {
 
-    private final Logger LOGGER = LogManager.getLogger(UiLoginSteps.class);
-    private final WebDriver DRIVER = WebDriverManager.getDriver();
-    LoginPage loginPage = new LoginPage(DRIVER);
-    DbSteps dbSteps = new DbSteps();
-    Users users = new Users();
+    private final Logger LOG = LogManager.getLogger(UiLoginSteps.class);
+    LoginPage loginPage = new LoginPage();
+    UiSharedSteps sharedSteps = new UiSharedSteps();
+    DbActions dbActions = new DbActions();
+    Users user = new Users();
 
+    @Given("User is on Login page")
+    public void accessLoginPage() {
+        sharedSteps.navigateToLoginPage();
+        sharedSteps.checkUiElements("Login");
+        LOG.info("Login page accessed and has all required elements.");
+    }
 
     @When("User logs in with valid email and password")
     public void loginUserWithValidCredentials() throws Exception {
-        LOGGER.info("Attempting to login last registered user.");
-        users = dbSteps.selectLastInsertedUser();
-        String rawPassword = dbSteps.decryptAesKey(users.getPassword());
-        LOGGER.info("Logging user with the following credentials: {} and {}", users.getEmail(), rawPassword);
-        loginPage.loginUser(users.getEmail(), rawPassword);
+        LOG.info("Attempting to login registered user.");
+        user = dbActions.selectLastInsertedUser();
+        LOG.info("User with the following email {} is retrieved from DB.", user.getEmail());
+        String rawPassword = EncryptionUtils.decryptAesKey(user.getPassword());
+
+        loginPage.loginUser(user.getEmail(), rawPassword);
+        LOG.info("Logging user with the following credentials: {} and {}.", user.getEmail(), rawPassword);
     }
 
     @When("User attempts login with invalid {} and {}")
     public void loginUserWithInvalidCredentials(String email, String password) {
-        LOGGER.info("Attempting to login user with invalid data.");
+        LOG.info("Attempting to login user with invalid or missing data.");
         loginPage.loginUser(email, password);
-        LOGGER.error("User login failed");
+        LOG.error("User login failed.");
     }
 }

@@ -8,7 +8,6 @@ public class ApiRequestMethods {
     ApiSetup apiSetup = new ApiSetup();
 
     public Response authorizationRequest(String endpoint, String email, String password) {
-
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("email", email);
         requestBody.put("password", password);

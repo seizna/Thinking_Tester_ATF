@@ -1,5 +1,4 @@
-package runners;
-
+package runner;
 
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
@@ -15,7 +14,7 @@ import org.junit.runner.RunWith;
                 "json:target/allure-results/cucumber.json",
                 "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
         }
-
 )
+
 public class TestRunner {
 }
