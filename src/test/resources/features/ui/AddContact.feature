@@ -4,7 +4,7 @@ Feature: Add Contact
     Given User is on Add Contact page
 
   @UI @TakeScreenshot
-  Scenario Outline: Check that user can add a contact providing valid data in required fields only
+  Scenario Outline: Check that user can add a contact providing valid data
     When User adds contact providing <valid Contact Details>
     Then User is redirected to Contact List page
     And <New contact> is added to contacts summary table

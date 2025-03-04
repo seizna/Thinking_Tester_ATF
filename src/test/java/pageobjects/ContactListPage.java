@@ -2,11 +2,13 @@ package pageobjects;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import static driversetup.WebDriverManager.getDriver;
+import static driversetup.WebDriverManager.*;
 
 public class ContactListPage {
 
@@ -22,6 +24,7 @@ public class ContactListPage {
     public ContactListPage() {
         PageFactory.initElements(getDriver(), this);
     }
+
 
     public WebElement getLogoutButton() {
         return logout;
@@ -40,7 +43,11 @@ public class ContactListPage {
     }
 
     public WebElement getSummaryTable() {
-        return summaryTable;
+        try {
+            return getDriver().findElement(By.id("myTable"));
+        } catch (NoSuchElementException ex) {
+            return summaryTable;
+        }
     }
 
     public boolean areAllContactListElementsDisplayed() {
@@ -58,12 +65,34 @@ public class ContactListPage {
         return true;
     }
 
-    public boolean isContactDisplayed(String contactName) {
+    public boolean isSummaryTableDisplayed() {
         try {
-            getSummaryTable().findElement(By.xpath(".//td[contains(text(),'" + contactName + "')]"));
-            return true;
-        } catch (NoSuchElementException ex) {
+            return getWait().until(ExpectedConditions.visibilityOf(summaryTable)).isDisplayed();
+        } catch (TimeoutException | NoSuchElementException ex) {
             return false;
         }
+    }
+
+    public boolean hasAtLeastOneContact() {
+        if (isSummaryTableDisplayed()) {
+            try {
+                return !getSummaryTable().findElements(By.xpath(".//td")).isEmpty();
+            } catch (NoSuchElementException ex) {
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public boolean isSpecificContactDisplayed(String contactName) {
+        if (isSummaryTableDisplayed()) {
+            try {
+                getSummaryTable().findElement(By.xpath(".//td[contains(text(),'" + contactName + "')]"));
+                return true;
+            } catch (NoSuchElementException ex) {
+                return false;
+            }
+        }
+        return false;
     }
 }

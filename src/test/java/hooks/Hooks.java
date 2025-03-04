@@ -33,9 +33,9 @@ public class Hooks {
         try {
             HibernateUtil.getSessionFactory();
             LOG.info("Hibernate session created.");
-        } catch (HibernateException e) {
+        } catch (HibernateException ex) {
             LOG.error("Failed to set up Hibernate session.");
-            e.printStackTrace();
+            ex.printStackTrace();
         }
     }
 
@@ -74,8 +74,8 @@ public class Hooks {
             if (Allure.getLifecycle().getCurrentTestCase().isPresent()) {
                 Allure.getLifecycle().addAttachment("Screenshot", "image/png", ".png", new ByteArrayInputStream(screenshot));
             }
-        } catch (Exception e){
-            LOG.warn("Something went wrong while saving screenshot {}.", String.valueOf(e));
+        } catch (Exception ex){
+            LOG.warn("Something went wrong while saving screenshot {}.", String.valueOf(ex));
         }
     }
 }

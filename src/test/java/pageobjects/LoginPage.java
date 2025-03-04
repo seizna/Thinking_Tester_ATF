@@ -1,6 +1,5 @@
 package pageobjects;
 
-import driversetup.WebDriverManager;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
@@ -8,7 +7,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import static driversetup.WebDriverManager.getDriver;
+import static driversetup.WebDriverManager.*;
 
 public class LoginPage {
 
@@ -26,6 +25,7 @@ public class LoginPage {
 
     @FindBy(id = "error")
     private WebElement validationMessage;
+
 
     public LoginPage() {
         PageFactory.initElements(getDriver(), this);
@@ -65,8 +65,8 @@ public class LoginPage {
 
     public boolean isValidationMessageDisplayed() {
         try {
-            return WebDriverManager.getWait().until(ExpectedConditions.visibilityOf(validationMessage)).isDisplayed();
-        } catch (TimeoutException | NoSuchElementException e) {
+            return getWait().until(ExpectedConditions.visibilityOf(validationMessage)).isDisplayed();
+        } catch (TimeoutException | NoSuchElementException ex) {
             return false;
         }
     }

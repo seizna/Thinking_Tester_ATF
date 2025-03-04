@@ -1,14 +1,13 @@
 package stepdefinitions;
 
-import driversetup.BrowserActions;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.TimeoutException;
 import pageobjects.AddEditContactPage;
 import pageobjects.ContactListPage;
+
 import java.util.Arrays;
 
 import static org.junit.Assert.assertTrue;
@@ -20,7 +19,6 @@ public class UiAddContactSteps {
     UiLoginSteps loginSteps = new UiLoginSteps();
     ContactListPage contactListPage = new ContactListPage();
     AddEditContactPage addEditContactPage = new AddEditContactPage();
-    BrowserActions browserActions = new BrowserActions();
 
     @Given("User is on Add Contact page")
     public void accessAddContactPage() throws Exception {
@@ -69,15 +67,9 @@ public class UiAddContactSteps {
 
     @Then("{} is added to contacts summary table")
     public void checkCreatedContactInSummary(String contactName) {
-        try {
-            browserActions.waitForElement(contactListPage.getSummaryTable());
-        } catch (TimeoutException ex) {
-            LOG.error("Summary table is not visible.", ex);
-        }
-
-        boolean isContactFound = contactListPage.isContactDisplayed(contactName);
-        assertTrue("Contact " + contactName + " is not found in the summary table.", isContactFound);
-        LOG.info("New {} contact is displayed in contacts summary table.", contactName);
+        assertTrue("Contact is not displayed in contacts summary table.", contactListPage.isSpecificContactDisplayed(contactName));
+        LOG.info("New contact with name '{}' is displayed in contacts summary table.", contactName);
     }
 }
+
 
