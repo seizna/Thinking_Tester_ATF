@@ -7,20 +7,24 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import static driversetup.WebDriverManager.*;
+import static driversetup.WebDriverManager.getDriver;
+import static driversetup.WebDriverManager.getWait;
 
 public class AddEditContactPage {
+
+    @FindBy(css = "header h1")
+    private WebElement header;
 
     @FindBy(id = "firstName")
     private WebElement firstName;
 
-    @FindBy(xpath = "//*[@id=\"add-contact\"]/p[1]/label[1]")
+    @FindBy(css = "label[for='firstName']")
     private WebElement firstNameAsterisk;
 
     @FindBy(id = "lastName")
     private WebElement lastName;
 
-    @FindBy(xpath = "//*[@id=\"add-contact\"]/p[1]/label[2]")
+    @FindBy(css = "label[for='lastName']")
     private WebElement lastNameAsterisk;
 
     @FindBy(id = "birthdate")
@@ -33,10 +37,10 @@ public class AddEditContactPage {
     private WebElement phone;
 
     @FindBy(id = "street1")
-    private WebElement streetAddr1;
+    private WebElement address1;
 
     @FindBy(id = "street2")
-    private WebElement streetAddr2;
+    private WebElement address2;
 
     @FindBy(id = "city")
     private WebElement city;
@@ -56,6 +60,9 @@ public class AddEditContactPage {
     @FindBy(id = "cancel")
     private WebElement cancelButton;
 
+    @FindBy(id = "logout")
+    private WebElement logoutButton;
+
     @FindBy(id = "error")
     private WebElement validationMessage;
 
@@ -64,9 +71,6 @@ public class AddEditContactPage {
         PageFactory.initElements(getDriver(), this);
     }
 
-    public WebElement getFirstName() {
-        return firstName;
-    }
 
     public void setFirstName(String firstName) {
         this.firstName.sendKeys(firstName);
@@ -74,14 +78,6 @@ public class AddEditContactPage {
 
     public void clearFirstName() {
         this.firstName.clear();
-    }
-
-    public WebElement getFirstNameAsterisk() {
-        return firstNameAsterisk;
-    }
-
-    public WebElement getLastName() {
-        return lastName;
     }
 
     public void setLastName(String lastName) {
@@ -92,96 +88,52 @@ public class AddEditContactPage {
         this.lastName.clear();
     }
 
-    public WebElement getLastNameAsterisk() {
-        return lastNameAsterisk;
-    }
-
-    public WebElement getDateOfBirth() {
-        return dateOfBirth;
-    }
-
     public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth.sendKeys(dateOfBirth);
-    }
-
-    public WebElement getEmail() {
-        return email;
     }
 
     public void setEmail(String email) {
         this.email.sendKeys(email);
     }
 
-    public WebElement getPhone() {
-        return phone;
-    }
-
     public void setPhone(String phone) {
         this.phone.sendKeys(phone);
     }
 
-    public WebElement getStreetAddr1() {
-        return streetAddr1;
+    public void setAddress1(String address1) {
+        this.address1.sendKeys(address1);
     }
 
-    public void setStreetAddr1(String streetAddr1) {
-        this.streetAddr1.sendKeys(streetAddr1);
-    }
-
-    public WebElement getStreetAddr2() {
-        return streetAddr2;
-    }
-
-    public void setStreetAddr2(String streetAddr2) {
-        this.streetAddr2.sendKeys(streetAddr2);
-    }
-
-    public WebElement getCity() {
-        return city;
+    public void setAddress2(String address2) {
+        this.address2.sendKeys(address2);
     }
 
     public void setCity(String city) {
         this.city.sendKeys(city);
     }
 
-    public WebElement getStateOrProvince() {
-        return stateOrProvince;
-    }
-
     public void setStateOrProvince(String stateOrProvince) {
         this.stateOrProvince.sendKeys(stateOrProvince);
-    }
-
-    public WebElement getPostalCode() {
-        return postalCode;
     }
 
     public void setPostalCode(String postalCode) {
         this.postalCode.sendKeys(postalCode);
     }
 
-    public WebElement getCountry() {
-        return country;
-    }
-
     public void setCountry(String country) {
         this.country.sendKeys(country);
-    }
-
-    public WebElement getSubmitButton() {
-        return submitButton;
     }
 
     public void clickSubmitButton() {
         submitButton.click();
     }
 
-    public WebElement getCancelButton() {
-        return cancelButton;
-    }
-
     public void clickCancelButton() {
         cancelButton.click();
+    }
+
+    public void clickLogoutButton() {
+        logoutButton.click();
     }
 
     public boolean isValidationMessageDisplayed() {
@@ -201,24 +153,8 @@ public class AddEditContactPage {
     }
 
     public boolean areAllContactElementsDisplayed() {
-
-        WebElement[] contactElements = new WebElement[15];
-        contactElements[0] = getFirstName();
-        contactElements[1] = getFirstNameAsterisk();
-        contactElements[2] = getLastName();
-        contactElements[3] = getLastNameAsterisk();
-        contactElements[4] = getDateOfBirth();
-        contactElements[5] = getEmail();
-        contactElements[6] = getPhone();
-        contactElements[7] = getStreetAddr1();
-        contactElements[8] = getStreetAddr2();
-        contactElements[9] = getCity();
-        contactElements[10] = getStateOrProvince();
-        contactElements[11] = getPostalCode();
-        contactElements[12] = getCountry();
-        contactElements[13] = getSubmitButton();
-        contactElements[14] = getCancelButton();
-
+        WebElement[] contactElements = {header, firstName, firstNameAsterisk, lastName, lastNameAsterisk, dateOfBirth, email, phone,
+                address1, address2, city, stateOrProvince, postalCode, country, submitButton, cancelButton, logoutButton};
         for (WebElement contactElement : contactElements) {
             if (contactElement == null || !contactElement.isDisplayed()) {
                 return false;
@@ -242,13 +178,12 @@ public class AddEditContactPage {
         setDateOfBirth(dateOfBirth);
         setEmail(email);
         setPhone(phone);
-        setStreetAddr1(streetAddr1);
-        setStreetAddr2(streetAddr2);
+        setAddress1(streetAddr1);
+        setAddress2(streetAddr2);
         setCity(city);
         setStateOrProvince(stateOrProvince);
         setPostalCode(postalCode);
         setCountry(country);
         clickSubmitButton();
     }
-
 }

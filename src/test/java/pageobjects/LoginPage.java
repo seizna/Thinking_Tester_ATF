@@ -7,9 +7,13 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import static driversetup.WebDriverManager.*;
+import static driversetup.WebDriverManager.getDriver;
+import static driversetup.WebDriverManager.getWait;
 
 public class LoginPage {
+
+    @FindBy(css = "header h1")
+    private WebElement header;
 
     @FindBy(id = "email")
     private WebElement email;
@@ -18,7 +22,7 @@ public class LoginPage {
     private WebElement password;
 
     @FindBy(id = "submit")
-    private static WebElement submitButton;
+    private WebElement submitButton;
 
     @FindBy(id = "signup")
     private WebElement signUpButton;
@@ -31,32 +35,29 @@ public class LoginPage {
         PageFactory.initElements(getDriver(), this);
     }
 
-    public WebElement getEmail() {
-        return email;
+
+    public boolean isHeaderDisplayed() {
+        return header.isDisplayed();
+    }
+
+    public String getHeaderText() {
+        if (isHeaderDisplayed()) {
+            return header.getText();
+        } else {
+            return "";
+        }
     }
 
     public void setEmail(String email) {
         this.email.sendKeys(email);
     }
 
-    public WebElement getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password.sendKeys(password);
     }
 
-    public WebElement getSubmitButton() {
-        return submitButton;
-    }
-
     public void clickSubmitButton() {
         submitButton.click();
-    }
-
-    public WebElement getSignUpButton() {
-        return signUpButton;
     }
 
     public void clickSignUpButton() {
@@ -80,13 +81,7 @@ public class LoginPage {
     }
 
     public boolean areAllLoginElementsDisplayed() {
-
-        WebElement[] loginElements = new WebElement[4];
-        loginElements[0] = getEmail();
-        loginElements[1] = getPassword();
-        loginElements[2] = getSubmitButton();
-        loginElements[3] = getSignUpButton();
-
+        WebElement[] loginElements = {header, email, password, submitButton, signUpButton};
         for (WebElement loginElement : loginElements) {
             if (loginElement == null || !loginElement.isDisplayed()) {
                 return false;

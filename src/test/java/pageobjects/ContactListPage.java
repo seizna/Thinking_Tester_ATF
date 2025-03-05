@@ -8,38 +8,41 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import static driversetup.WebDriverManager.*;
+import java.util.List;
+
+import static driversetup.WebDriverManager.getDriver;
+import static driversetup.WebDriverManager.getWait;
 
 public class ContactListPage {
 
-    @FindBy(id = "logout")
-    private WebElement logout;
-
-    @FindBy(id = "add-contact")
-    private WebElement addContact;
+    @FindBy(css = "header h1")
+    private WebElement header;
 
     @FindBy(className = "contactTable")
     private WebElement summaryTable;
+
+    @FindBy(id = "add-contact")
+    private WebElement addContactButton;
+
+    @FindBy(id = "logout")
+    private WebElement logoutButton;
+
 
     public ContactListPage() {
         PageFactory.initElements(getDriver(), this);
     }
 
 
-    public WebElement getLogoutButton() {
-        return logout;
+    public boolean isHeaderDisplayed() {
+        return header.isDisplayed();
     }
 
-    public void clickLogoutButton() {
-        logout.click();
-    }
-
-    public WebElement getAddContactButton() {
-        return addContact;
-    }
-
-    public void clickAddContactButton() {
-        addContact.click();
+    public String getHeaderText() {
+        if (isHeaderDisplayed()) {
+            return header.getText();
+        } else {
+            return "";
+        }
     }
 
     public WebElement getSummaryTable() {
@@ -50,13 +53,16 @@ public class ContactListPage {
         }
     }
 
+    public void clickAddContactButton() {
+        addContactButton.click();
+    }
+
+    public void clickLogoutButton() {
+        logoutButton.click();
+    }
+
     public boolean areAllContactListElementsDisplayed() {
-
-        WebElement[] contactListElements = new WebElement[3];
-        contactListElements[0] = getLogoutButton();
-        contactListElements[1] = getAddContactButton();
-        contactListElements[2] = getSummaryTable();
-
+        WebElement[] contactListElements = {header, logoutButton, addContactButton, summaryTable};
         for (WebElement contactListElement : contactListElements) {
             if (contactListElement == null || !contactListElement.isDisplayed()) {
                 return false;
@@ -82,6 +88,17 @@ public class ContactListPage {
             }
         }
         return false;
+    }
+
+    public void selectExistingContact() {
+        try {
+            List<WebElement> rows = getSummaryTable().findElements(By.className("contactTableBodyRow"));
+            if (!rows.isEmpty()) {
+                rows.getFirst().click();
+            }
+        } catch (NoSuchElementException ex) {
+            ex.getMessage();
+        }
     }
 
     public boolean isSpecificContactDisplayed(String contactName) {
