@@ -26,12 +26,6 @@ public class ContactDetailsPage {
     @FindBy(id = "contactDetails")
     private WebElement contactDetailsForm;
 
-    @FindBy(id = "firstName")
-    private WebElement firstName;
-
-    @FindBy(id = "lastName")
-    private WebElement lastName;
-
 
     public ContactDetailsPage() {
         PageFactory.initElements(getDriver(), this);

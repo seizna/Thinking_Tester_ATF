@@ -20,7 +20,7 @@ Feature: Edit Contact
   @UI @TakeScreenshot
   Scenario Outline: Verify system validates user input on Edit Contact page
     When User updates contact providing <invalid Contact Details>
-    Then <Validation message> is displayed on Add Contact page
+    Then <Validation message> is displayed on Edit Contact page
     Examples:
       | invalid Contact Details                                                             | Validation message                                                                                                                          |
       | , , , , , , , , , ,                                                                 | Validation failed: lastName: Path `lastName` is required., firstName: Path `firstName` is required.                                         |

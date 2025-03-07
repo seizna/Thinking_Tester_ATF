@@ -80,7 +80,7 @@ public class UiSharedSteps {
             case "Add User":
                 arePageElementsDisplayed = addUserPage.areAllAddUserElementsDisplayed();
                 break;
-            case "Add Contact":
+            case "Add Contact", "Edit Contact":
                 arePageElementsDisplayed = addEditContactPage.areAllContactElementsDisplayed();
                 break;
             case "Contact Details":
@@ -105,7 +105,7 @@ public class UiSharedSteps {
             case "Add User":
                 actualValidationMessage = addUserPage.getValidationMessageText();
                 break;
-            case "Add Contact":
+            case "Add Contact", "Edit Contact":
                 actualValidationMessage = addEditContactPage.getValidationMessageText();
                 break;
             default:
