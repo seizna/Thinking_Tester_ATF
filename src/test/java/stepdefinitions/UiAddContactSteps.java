@@ -7,8 +7,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import pageobjects.AddEditContactPage;
 import pageobjects.ContactListPage;
-
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertTrue;
 
@@ -47,28 +47,33 @@ public class UiAddContactSteps {
         String postalCode = details[9].trim();
         String country = details[10].trim();
 
-        boolean allOptionalFieldsEmpty = Arrays.stream(details, 2, details.length)
-                .allMatch(String::isBlank);
+        boolean allOptionalFieldsEmpty = Arrays.stream(details, 2, details.length).allMatch(String::isBlank);
 
         if (allOptionalFieldsEmpty) {
             LOG.info("Adding a contact providing required fields only.");
-            addEditContactPage.addContact(firstName, lastName);
+            addEditContactPage.addEditContact(firstName, lastName);
             LOG.info("Contact '{}' is submitted.", firstName + " " + lastName);
         } else {
             LOG.info("Adding a contact providing required and optional fields.");
-            addEditContactPage.addContact(firstName, lastName, dateOfBirth, email, phone,
+            addEditContactPage.addEditContact(firstName, lastName, dateOfBirth, email, phone,
                     streetAddr1, streetAddr2, city, stateOrProvince,
                     postalCode, country);
-            LOG.info("Contact is submitted with the following name '{}' and optional info: '{}'.",
-                    firstName + " " + lastName,
-                    dateOfBirth + " " + email + " " + phone + " " + streetAddr1 + " " + streetAddr2 + " " + city + " " + stateOrProvince + " " + postalCode + " " + country);
+            LOG.info("Contact is submitted with the following required name '{}' and optional info '{}'",
+                    firstName + " " + lastName, formatOptionalFields(dateOfBirth, email, phone,
+                            streetAddr1, streetAddr2, city, stateOrProvince, postalCode, country));
         }
     }
 
-    @Then("{} is added to contacts summary table")
+    private String formatOptionalFields(String... fields) {
+        return Arrays.stream(fields)
+                .filter(field -> field != null && !field.isBlank())
+                .collect(Collectors.joining(", "));
+    }
+
+    @Then("{} is displayed in contacts summary table")
     public void checkCreatedContactInSummary(String contactName) {
         assertTrue("Contact is not displayed in contacts summary table.", contactListPage.isSpecificContactDisplayed(contactName));
-        LOG.info("New contact with name '{}' is displayed in contacts summary table.", contactName);
+        LOG.info("Contact with name '{}' is displayed in contacts summary table.", contactName);
     }
 }
 

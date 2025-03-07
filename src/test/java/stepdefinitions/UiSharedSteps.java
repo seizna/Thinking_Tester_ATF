@@ -7,10 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 import org.openqa.selenium.TimeoutException;
-import pageobjects.AddEditContactPage;
-import pageobjects.AddUserPage;
-import pageobjects.ContactListPage;
-import pageobjects.LoginPage;
+import pageobjects.*;
 import utils.ConfigReader;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +19,7 @@ public class UiSharedSteps {
     AddUserPage addUserPage = new AddUserPage();
     ContactListPage contactListPage = new ContactListPage();
     AddEditContactPage addEditContactPage = new AddEditContactPage();
+    ContactDetailsPage contactDetailsPage = new ContactDetailsPage();
     BrowserActions browserActions = new BrowserActions();
 
 
@@ -84,6 +82,9 @@ public class UiSharedSteps {
                 break;
             case "Add Contact":
                 arePageElementsDisplayed = addEditContactPage.areAllContactElementsDisplayed();
+                break;
+            case "Contact Details":
+                arePageElementsDisplayed = contactDetailsPage.areAllContactDetailsElementsDisplayed();
                 break;
         }
         if (arePageElementsDisplayed) {

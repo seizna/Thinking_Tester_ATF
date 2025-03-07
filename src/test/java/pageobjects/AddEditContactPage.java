@@ -72,56 +72,53 @@ public class AddEditContactPage {
     }
 
 
-    public void setFirstName(String firstName) {
-        this.firstName.sendKeys(firstName);
+    private void clearAndSet(WebElement element, String value) {
+        element.clear();
+        element.sendKeys(value);
     }
 
-    public void clearFirstName() {
-        this.firstName.clear();
+    public void setFirstName(String firstName) {
+        clearAndSet(this.firstName, firstName);
     }
 
     public void setLastName(String lastName) {
-        this.lastName.sendKeys(lastName);
-    }
-
-    public void clearLastName() {
-        this.lastName.clear();
+        clearAndSet(this.lastName, lastName);
     }
 
     public void setDateOfBirth(String dateOfBirth) {
-        this.dateOfBirth.sendKeys(dateOfBirth);
+        clearAndSet(this.dateOfBirth, dateOfBirth);
     }
 
     public void setEmail(String email) {
-        this.email.sendKeys(email);
+        clearAndSet(this.email, email);
     }
 
     public void setPhone(String phone) {
-        this.phone.sendKeys(phone);
+        clearAndSet(this.phone, phone);
     }
 
     public void setAddress1(String address1) {
-        this.address1.sendKeys(address1);
+        clearAndSet(this.address1, address1);
     }
 
     public void setAddress2(String address2) {
-        this.address2.sendKeys(address2);
+        clearAndSet(this.address2, address2);
     }
 
     public void setCity(String city) {
-        this.city.sendKeys(city);
+        clearAndSet(this.city, city);
     }
 
     public void setStateOrProvince(String stateOrProvince) {
-        this.stateOrProvince.sendKeys(stateOrProvince);
+        clearAndSet(this.stateOrProvince, stateOrProvince);
     }
 
     public void setPostalCode(String postalCode) {
-        this.postalCode.sendKeys(postalCode);
+        clearAndSet(this.postalCode, postalCode);
     }
 
     public void setCountry(String country) {
-        this.country.sendKeys(country);
+        clearAndSet(this.country, country);
     }
 
     public void clickSubmitButton() {
@@ -163,15 +160,15 @@ public class AddEditContactPage {
         return true;
     }
 
-    public void addContact(String firstName, String lastName) {
+    public void addEditContact(String firstName, String lastName) {
         setFirstName(firstName);
         setLastName(lastName);
         clickSubmitButton();
     }
 
-    public void addContact(String firstName, String lastName, String dateOfBirth, String email, String phone,
-                           String streetAddr1, String streetAddr2, String city, String stateOrProvince,
-                           String postalCode, String country) {
+    public void addEditContact(String firstName, String lastName, String dateOfBirth, String email, String phone,
+                               String streetAddr1, String streetAddr2, String city, String stateOrProvince,
+                               String postalCode, String country) {
 
         setFirstName(firstName);
         setLastName(lastName);
