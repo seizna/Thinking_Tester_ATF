@@ -1,6 +1,5 @@
 package pageobjects;
 
-import driversetup.WebDriverManager;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
@@ -9,8 +8,12 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import static driversetup.WebDriverManager.getDriver;
+import static driversetup.WebDriverManager.getWait;
 
 public class AddUserPage {
+
+    @FindBy(css = "header h1")
+    private WebElement header;
 
     @FindBy(id = "firstName")
     private WebElement firstName;
@@ -33,52 +36,30 @@ public class AddUserPage {
     @FindBy(id = "error")
     private WebElement validationMessage;
 
+
     public AddUserPage() {
         PageFactory.initElements(getDriver(), this);
     }
 
-    public WebElement getFirstName() {
-        return firstName;
-    }
 
     public void setFirstName(String firstName) {
         this.firstName.sendKeys(firstName);
-    }
-
-    public WebElement getLastName() {
-        return lastName;
     }
 
     public void setLastName(String lastName) {
         this.lastName.sendKeys(lastName);
     }
 
-    public WebElement getEmail() {
-        return email;
-    }
-
     public void setEmail(String email) {
         this.email.sendKeys(email);
-    }
-
-    public WebElement getPassword() {
-        return password;
     }
 
     public void setPassword(String password) {
         this.password.sendKeys(password);
     }
 
-    public WebElement getSubmitButton() {
-        return submitButton;
-    }
-
     public void clickSubmitButton() {
         submitButton.click();
-    }
-
-    public WebElement getCancelButton() {
-        return cancelButton;
     }
 
     public void clickCancelButton() {
@@ -87,8 +68,8 @@ public class AddUserPage {
 
     public boolean isValidationMessageDisplayed() {
         try {
-            return WebDriverManager.getWait().until(ExpectedConditions.visibilityOf(validationMessage)).isDisplayed();
-        } catch (TimeoutException | NoSuchElementException e) {
+            return getWait().until(ExpectedConditions.visibilityOf(validationMessage)).isDisplayed();
+        } catch (TimeoutException | NoSuchElementException ex) {
             return false;
         }
     }
@@ -102,15 +83,7 @@ public class AddUserPage {
     }
 
     public boolean areAllAddUserElementsDisplayed() {
-
-        WebElement[] addUserElements = new WebElement[6];
-        addUserElements[0] = getFirstName();
-        addUserElements[1] = getLastName();
-        addUserElements[2] = getEmail();
-        addUserElements[3] = getPassword();
-        addUserElements[4] = getSubmitButton();
-        addUserElements[5] = getCancelButton();
-
+        WebElement[] addUserElements = {header, firstName, lastName, email, password, submitButton, cancelButton};
         for (WebElement addUserElement : addUserElements) {
             if (addUserElement == null || !addUserElement.isDisplayed()) {
                 return false;
