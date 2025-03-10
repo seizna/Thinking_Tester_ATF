@@ -62,7 +62,7 @@ public class UiSharedSteps {
                 Assert.assertEquals("User is not redirected to the expected page: " + currentPageUrl, expectedPageUrl, currentPageUrl);
             }
         } catch (TimeoutException ex) {
-            LOG.error("Timeout waiting for user to be redirected to '{}' page", expectedPageTitle, ex);
+            LOG.error("Timeout waiting for user to be redirected to '{}' page", page, ex);
             throw ex;
         }
     }

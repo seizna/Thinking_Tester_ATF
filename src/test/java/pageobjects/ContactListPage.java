@@ -90,14 +90,18 @@ public class ContactListPage {
         return false;
     }
 
-    public void selectExistingContact() {
-        try {
-            List<WebElement> rows = getSummaryTable().findElements(By.className("contactTableBodyRow"));
-            if (!rows.isEmpty()) {
-                rows.getFirst().click();
+    public void selectExistingContact() throws Exception {
+        if (hasAtLeastOneContact()) {
+            try {
+                List<WebElement> rows = getSummaryTable().findElements(By.className("contactTableBodyRow"));
+                if (!rows.isEmpty()) {
+                    rows.getFirst().click();
+                }
+            } catch (NoSuchElementException ex) {
+                ex.getMessage();
             }
-        } catch (NoSuchElementException ex) {
-            ex.getMessage();
+        } else {
+            throw new Exception("Contacts summary table is empty.");
         }
     }
 

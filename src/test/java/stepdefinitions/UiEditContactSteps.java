@@ -8,10 +8,7 @@ import org.apache.logging.log4j.Logger;
 import pageobjects.AddEditContactPage;
 import pageobjects.ContactDetailsPage;
 import pageobjects.ContactListPage;
-
 import java.util.Arrays;
-
-import static org.junit.Assert.assertTrue;
 
 public class UiEditContactSteps {
 
@@ -27,31 +24,15 @@ public class UiEditContactSteps {
         sharedSteps.navigateToLoginPage();
         loginSteps.loginUserWithValidCredentials();
         sharedSteps.checkUiElements("Contact List");
-        selectExistingContact();
+        contactListPage.selectExistingContact();
+        LOG.info("Existing contact is selected from the summary table.");
         sharedSteps.checkUserRedirectToExpectedPage("Contact Details");
         sharedSteps.checkUiElements("Contact Details");
-        clickEditContact();
+        contactDetailsPage.clickEditContactButton();
+        LOG.info("User enters Edit mode by clicking [Edit Contact] button.");
         sharedSteps.checkUserRedirectToExpectedPage("Edit Contact");
         sharedSteps.checkUiElements("Edit Contact");
         LOG.info("Edit Contact page accessed and has all required elements.");
-    }
-
-    @And("At least one contact exists in contacts summary table")
-    public void checkExistingContactInSummary() {
-        assertTrue("Contacts summary table is empty.", contactListPage.hasAtLeastOneContact());
-        LOG.info("Summary table has at least one contact.");
-    }
-
-    @And("User selects existing contact to view the Contact Details")
-    public void selectExistingContact() {
-        contactListPage.selectExistingContact();
-        LOG.info("Existing contact is selected from the summary table.");
-    }
-
-    @And("User clicks [Edit Contact] button on Contact Details page")
-    public void clickEditContact() {
-        contactDetailsPage.clickEditContactButton();
-        LOG.info("User clicks [Edit Contact] button on Contact Details page.");
     }
 
     @When("User updates contact providing {}")
