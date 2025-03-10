@@ -9,8 +9,7 @@ import org.junit.Assert;
 import org.openqa.selenium.TimeoutException;
 import pageobjects.*;
 import utils.ConfigReader;
-import java.util.HashMap;
-import java.util.Map;
+import utils.Page;
 
 public class UiSharedSteps {
 
@@ -37,34 +36,35 @@ public class UiSharedSteps {
     }
 
     @Then("User is redirected to {} page")
-    public void checkUserRedirectToExpectedPage(String scenarioPageTitle) {
-        String expectedPageTitle = getExpectedPageTitle(scenarioPageTitle);
+    public void checkUserRedirectToExpectedPage(String scenarioPage) {
+        Page page = Page.fromScenarioKey(scenarioPage);
 
-        if (expectedPageTitle == null) {
-            LOG.error("Unknown page title: {}", scenarioPageTitle);
-            throw new IllegalArgumentException("Unknown page: " + scenarioPageTitle);
+        if (page == null) {
+            LOG.error("Unknown page identifier: {}", scenarioPage);
+            throw new IllegalArgumentException("Unknown page: " + scenarioPage);
         }
+
+        String expectedPageTitle = page.getPageTitle();
+        String expectedPageUrlKey = page.getPageUrlKey();
 
         try {
-            LOG.debug("Waiting for page title to be '{}'", expectedPageTitle);
-            browserActions.waitForPageToLoad(expectedPageTitle);
+            if (expectedPageTitle != null && !expectedPageTitle.isEmpty()) {
+                LOG.debug("Waiting for page title to be '{}'", expectedPageTitle);
+                browserActions.waitForExpectedPageTitle(expectedPageTitle);
+                String currentPageTitle = browserActions.getPageTitle();
+                Assert.assertEquals("User is not redirected to the expected page: " + expectedPageTitle, expectedPageTitle, currentPageTitle);
+            } else {
+                String expectedPageUrl = ConfigReader.getProperty(expectedPageUrlKey);
+
+                LOG.debug("Waiting for URL to be '{}'", expectedPageUrl);
+                browserActions.waitForExpectedPageUrl(expectedPageUrl);
+                String currentPageUrl = browserActions.getPageUrl();
+                Assert.assertEquals("User is not redirected to the expected page: " + currentPageUrl, expectedPageUrl, currentPageUrl);
+            }
         } catch (TimeoutException ex) {
             LOG.error("Timeout waiting for user to be redirected to '{}' page", expectedPageTitle, ex);
+            throw ex;
         }
-
-        String currentPageTitle = browserActions.getPageTitle();
-        Assert.assertEquals("User is not redirected to the expected page: " + expectedPageTitle, expectedPageTitle, currentPageTitle);
-    }
-
-    private String getExpectedPageTitle(String pageTitle) {
-        Map<String, String> expectedPageMap = new HashMap<>();
-        expectedPageMap.put("Contact List App", "Contact List App");
-        expectedPageMap.put("Add User", "Add User");
-        expectedPageMap.put("Contact List", "My Contacts");
-        expectedPageMap.put("Add Contact", "Add Contact");
-        expectedPageMap.put("Contact Details", "Contact Details");
-
-        return expectedPageMap.get(pageTitle);
     }
 
     public void checkUiElements(String pageName) {

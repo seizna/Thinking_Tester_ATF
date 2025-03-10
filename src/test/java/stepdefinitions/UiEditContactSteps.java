@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import pageobjects.AddEditContactPage;
 import pageobjects.ContactDetailsPage;
 import pageobjects.ContactListPage;
+
 import java.util.Arrays;
 
 import static org.junit.Assert.assertTrue;
@@ -21,12 +22,18 @@ public class UiEditContactSteps {
     ContactDetailsPage contactDetailsPage = new ContactDetailsPage();
     AddEditContactPage addEditContactPage = new AddEditContactPage();
 
-    @Given("User is on Contact List page")
-    public void accessContactListPage() throws Exception {
+    @Given("User is on Edit Contact page")
+    public void accessEditContactPage() throws Exception {
         sharedSteps.navigateToLoginPage();
         loginSteps.loginUserWithValidCredentials();
         sharedSteps.checkUiElements("Contact List");
-        LOG.info("Contact List page accessed and has all required elements.");
+        selectExistingContact();
+        sharedSteps.checkUserRedirectToExpectedPage("Contact Details");
+        sharedSteps.checkUiElements("Contact Details");
+        clickEditContact();
+        sharedSteps.checkUserRedirectToExpectedPage("Edit Contact");
+        sharedSteps.checkUiElements("Edit Contact");
+        LOG.info("Edit Contact page accessed and has all required elements.");
     }
 
     @And("At least one contact exists in contacts summary table")
@@ -44,7 +51,7 @@ public class UiEditContactSteps {
     @And("User clicks [Edit Contact] button on Contact Details page")
     public void clickEditContact() {
         contactDetailsPage.clickEditContactButton();
-        LOG.info("User clicks Edit Contact button on Contact Details page.");
+        LOG.info("User clicks [Edit Contact] button on Contact Details page.");
     }
 
     @When("User updates contact providing {}")
@@ -69,7 +76,7 @@ public class UiEditContactSteps {
         if (allOptionalFieldsEmpty) {
             LOG.info("Updating contact's required fields.");
             addEditContactPage.addEditContact(firstName, lastName);
-            LOG.info("Contact name is updated to {}.", firstName + " " + lastName);
+            LOG.info("Contact name is updated to '{}'.", firstName + " " + lastName);
         } else {
             LOG.info("Updating contact's required and optional fields.");
             addEditContactPage.addEditContact(firstName, lastName, dateOfBirth, email, phone,
@@ -84,6 +91,6 @@ public class UiEditContactSteps {
     @And("User clicks [Return to Contact List] button on Contact Details page")
     public void clickReturnToContactList() {
         contactDetailsPage.clickReturnToContactListButton();
-        LOG.info("User clicks Return to Contact List button on Contact Details page.");
+        LOG.info("User clicks [Return to Contact List] button on Contact Details page.");
     }
 }

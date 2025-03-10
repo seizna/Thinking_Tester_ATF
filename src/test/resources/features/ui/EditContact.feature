@@ -1,10 +1,13 @@
 Feature: Edit Contact
 
+#  Background:
+#    Given User is on Contact List page
+#    And At least one contact exists in contacts summary table
+#    And User selects existing contact to view the Contact Details
+#    And User clicks [Edit Contact] button on Contact Details page
+
   Background:
-    Given User is on Contact List page
-    And At least one contact exists in contacts summary table
-    And User selects existing contact to view the Contact Details
-    And User clicks [Edit Contact] button on Contact Details page
+    Given User is on Edit Contact page
 
   @UI @TakeScreenshot
   Scenario Outline: Check that user can update contact's info

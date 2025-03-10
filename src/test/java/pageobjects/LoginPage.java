@@ -12,7 +12,7 @@ import static driversetup.WebDriverManager.getWait;
 
 public class LoginPage {
 
-    @FindBy(css = "header h1")
+    @FindBy(css = "h1")
     private WebElement header;
 
     @FindBy(id = "email")
