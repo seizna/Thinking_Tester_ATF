@@ -1,6 +1,6 @@
 package utils;
 /**
- * The {@code Page} enum represents existing pages of the application under test.
+ * The {@code PageKey} enum represents existing pages of the application under test.
  * It centralizes key properties for each page, including:
  * <ul>
  *   <li><strong>scenarioKey</strong>: An identifier used in BDD scenarios to reference the page.</li>
@@ -12,7 +12,7 @@ package utils;
  * {@code pageTitle} or the {@code pageUrlKey}.
  */
 
-public enum Page {
+public enum PageKey {
     LOGIN("Login", "Contact List App", "login.url"),
     ADD_USER("Add User", "Add User", "addUser.url"),
     CONTACT_LIST("Contact List", "My Contacts", "contactList.url"),
@@ -25,7 +25,7 @@ public enum Page {
     private final String pageUrlKey;
 
 
-    Page(String scenarioKey, String pageTitle, String pageUrlKey) {
+    PageKey(String scenarioKey, String pageTitle, String pageUrlKey) {
         this.scenarioKey = scenarioKey;
         this.pageTitle = pageTitle;
         this.pageUrlKey = pageUrlKey;
@@ -44,10 +44,10 @@ public enum Page {
         return pageUrlKey;
     }
 
-    public static Page fromScenarioKey(String scenarioKey) {
-        for (Page page : values()) {
-            if (page.getScenarioKey().equals(scenarioKey)) {
-                return page;
+    public static PageKey fromScenarioKey(String scenarioKey) {
+        for (PageKey pageKey : values()) {
+            if (pageKey.getScenarioKey().equals(scenarioKey)) {
+                return pageKey;
             }
         }
         return null;

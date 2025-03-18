@@ -45,11 +45,11 @@ public class UiRegistrationSteps {
 
         if (isEmailUnique) {
             LOG.info("User registration completed with success.");
-            ScenarioContext.setContext(ContextKey.FIRST_NAME, firstName);
-            ScenarioContext.setContext(ContextKey.LAST_NAME, lastName);
-            ScenarioContext.setContext(ContextKey.EMAIL, email);
-            ScenarioContext.setContext(ContextKey.RAW_PASSWORD, password);
-            ScenarioContext.setContext(ContextKey.ENCRYPTED_PASSWORD, EncryptionUtils.encryptAesKey(password));
+            ScenarioContext.setContext(ContextKey.USER_FIRST_NAME, firstName);
+            ScenarioContext.setContext(ContextKey.USER_LAST_NAME, lastName);
+            ScenarioContext.setContext(ContextKey.USER_EMAIL, email);
+            ScenarioContext.setContext(ContextKey.USER_RAW_PASSWORD, password);
+            ScenarioContext.setContext(ContextKey.USER_ENCRYPTED_PASSWORD, EncryptionUtils.encryptAesKey(password));
         } else {
             LOG.error("User registration failed.");
         }

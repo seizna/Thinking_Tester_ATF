@@ -29,6 +29,10 @@ public class BrowserActions {
         getWait().until(ExpectedConditions.urlToBe(expectedPageUrl));
     }
 
+    public void acceptBrowserAlert() {
+        getDriver().switchTo().alert().accept();
+    }
+
     public void closeBrowser() {
         closeDriver();
     }

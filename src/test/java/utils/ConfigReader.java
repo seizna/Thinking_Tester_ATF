@@ -2,6 +2,7 @@ package utils;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +17,7 @@ public class ConfigReader {
         try (InputStream input = new FileInputStream("src/test/resources/config.properties")) {
             PROPERTIES.load(input);
         } catch (IOException ex) {
-            LOG.error("Error reading properties file: " + ex.getMessage());
+            LOG.error("Error reading properties file: {}", ex.getMessage());
         }
     }
 

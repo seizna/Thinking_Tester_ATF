@@ -1,10 +1,9 @@
 package scenariocontext;
 
 public enum ContextKey {
-    FIRST_NAME,
-    LAST_NAME,
-    EMAIL,
-    RAW_PASSWORD,
-    ENCRYPTED_PASSWORD,
-    CREATED_CONTACT_NAME
+    USER_FIRST_NAME,
+    USER_LAST_NAME,
+    USER_EMAIL,
+    USER_RAW_PASSWORD,
+    USER_ENCRYPTED_PASSWORD
 }

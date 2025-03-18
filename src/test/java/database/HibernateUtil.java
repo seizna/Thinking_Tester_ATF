@@ -2,6 +2,7 @@ package database;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
@@ -18,9 +19,8 @@ public class HibernateUtil {
             config.configure("hibernate.cfg.xml");
             sessionFactory = config.buildSessionFactory();
             LOG.debug("SessionFactory initialized successfully.");
-        } catch (Throwable ex) {
-            LOG.error("Error initializing SessionFactory: {}.", ex.getMessage());
-            throw new ExceptionInInitializerError(ex);
+        } catch (HibernateException ex) {
+            LOG.error("Error initializing SessionFactory. This might be due to invalid configuration or invalid mapping information. Exception details: {}", ex.getMessage());
         }
     }
 

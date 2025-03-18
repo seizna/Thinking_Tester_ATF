@@ -1,6 +1,7 @@
 package database;
 
 import jakarta.persistence.NoResultException;
+import jakarta.persistence.RollbackException;
 import jakarta.persistence.TypedQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,8 +19,8 @@ public class DbActions {
             transaction = session.beginTransaction();
             session.persist(user);
             transaction.commit();
-        } catch (Exception ex) {
-            LOG.error("Error occurred while inserting user:", ex);
+        } catch (IllegalStateException | RollbackException ex) {
+            LOG.error("Error occurred while inserting user. The transaction might be in an illegal state, possibly due to a premature session closure or commit failure. Exception details: {}", ex.getMessage());
             if (transaction != null) {
                 transaction.rollback();
             }
@@ -34,25 +35,23 @@ public class DbActions {
             LOG.info("User with the following email {} retrieved from DB", user.getEmail());
             return user;
         } catch (NoResultException ex) {
-            LOG.debug("User with email {} not found in the DB.", email);
+            LOG.error("User with email {} not found in the DB.", email);
             return null;
         }
     }
-
 
     public void removeUser(Users user) {
         try {
             transaction = session.beginTransaction();
             session.remove(user);
             transaction.commit();
-        } catch (Exception ex) {
-            LOG.error("Error occurred while deleting user: ", ex);
+        } catch (IllegalStateException | RollbackException ex) {
+            LOG.error("Error occurred while deleting user. The transaction might be in an illegal state, possibly due to a premature session closure or commit failure. Exception details: {}", ex.getMessage());
             if (transaction != null) {
                 transaction.rollback();
             }
         }
     }
-
 
     public Users selectLastInsertedUser() {
         try {

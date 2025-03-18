@@ -6,9 +6,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import scenariocontext.FormKey;
+import java.util.Map;
 
 import static driversetup.WebDriverManager.getDriver;
 import static driversetup.WebDriverManager.getWait;
+import static scenariocontext.FormKey.*;
 
 public class AddEditContactPage {
 
@@ -66,11 +69,9 @@ public class AddEditContactPage {
     @FindBy(id = "error")
     private WebElement validationMessage;
 
-
     public AddEditContactPage() {
         PageFactory.initElements(getDriver(), this);
     }
-
 
     private void clearAndSet(WebElement element, String value) {
         element.clear();
@@ -125,14 +126,6 @@ public class AddEditContactPage {
         submitButton.click();
     }
 
-    public void clickCancelButton() {
-        cancelButton.click();
-    }
-
-    public void clickLogoutButton() {
-        logoutButton.click();
-    }
-
     public boolean isValidationMessageDisplayed() {
         try {
             return getWait().until(ExpectedConditions.visibilityOf(validationMessage)).isDisplayed();
@@ -160,27 +153,18 @@ public class AddEditContactPage {
         return true;
     }
 
-    public void addEditContact(String firstName, String lastName) {
-        setFirstName(firstName);
-        setLastName(lastName);
-        clickSubmitButton();
-    }
-
-    public void addEditContact(String firstName, String lastName, String dateOfBirth, String email, String phone,
-                               String streetAddr1, String streetAddr2, String city, String stateOrProvince,
-                               String postalCode, String country) {
-
-        setFirstName(firstName);
-        setLastName(lastName);
-        setDateOfBirth(dateOfBirth);
-        setEmail(email);
-        setPhone(phone);
-        setAddress1(streetAddr1);
-        setAddress2(streetAddr2);
-        setCity(city);
-        setStateOrProvince(stateOrProvince);
-        setPostalCode(postalCode);
-        setCountry(country);
+    public void addEditContact(Map<FormKey, String> parsedContact) {
+        setFirstName(parsedContact.get(CONTACT_FIRST_NAME));
+        setLastName(parsedContact.get(CONTACT_LAST_NAME));
+        setDateOfBirth(parsedContact.get(CONTACT_DATE_OF_BIRTH));
+        setEmail(parsedContact.get(CONTACT_EMAIL));
+        setPhone(parsedContact.get(CONTACT_PHONE));
+        setAddress1(parsedContact.get(CONTACT_STREET_ADDR1));
+        setAddress2(parsedContact.get(CONTACT_STREET_ADDR2));
+        setCity(parsedContact.get(CONTACT_CITY));
+        setStateOrProvince(parsedContact.get(CONTACT_STATE_OR_PROVINCE));
+        setPostalCode(parsedContact.get(CONTACT_POSTAL_CODE));
+        setCountry(parsedContact.get(CONTACT_COUNTRY));
         clickSubmitButton();
     }
 }

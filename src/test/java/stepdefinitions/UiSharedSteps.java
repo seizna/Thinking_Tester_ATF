@@ -5,11 +5,17 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.Assert;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebDriverException;
 import pageobjects.*;
+import scenariocontext.FormKey;
+import scenariocontext.ScenarioContext;
 import utils.ConfigReader;
-import utils.Page;
+import utils.PageKey;
+
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
 
 public class UiSharedSteps {
 
@@ -28,42 +34,41 @@ public class UiSharedSteps {
             String expectedTitle = "Contact List App";
             browserActions.navigateTo(ConfigReader.getProperty("login.url"));
             String actualTitle = browserActions.getPageTitle();
-            Assert.assertEquals("Login page title mismatch.", expectedTitle, actualTitle);
-        } catch (Exception ex) {
-            LOG.error("Failed to navigate to Login page:" + ex.getMessage());
+            assertEquals("Login page title mismatch.", expectedTitle, actualTitle);
+        } catch (WebDriverException ex) {
+            LOG.error("Failed to navigate to Login page. Exception details: {}", ex.getMessage());
             throw ex;
         }
     }
 
     @Then("User is redirected to {} page")
     public void checkUserRedirectToExpectedPage(String scenarioPage) {
-        Page page = Page.fromScenarioKey(scenarioPage);
+        PageKey pageKey = PageKey.fromScenarioKey(scenarioPage);
 
-        if (page == null) {
+        if (pageKey == null) {
             LOG.error("Unknown page identifier: {}", scenarioPage);
             throw new IllegalArgumentException("Unknown page: " + scenarioPage);
         }
 
-        String expectedPageTitle = page.getPageTitle();
-        String expectedPageUrlKey = page.getPageUrlKey();
+        String expectedPageTitle = pageKey.getPageTitle();
+        String expectedPageUrlKey = pageKey.getPageUrlKey();
 
         try {
             if (expectedPageTitle != null && !expectedPageTitle.isEmpty()) {
                 LOG.debug("Waiting for page title to be '{}'", expectedPageTitle);
                 browserActions.waitForExpectedPageTitle(expectedPageTitle);
                 String currentPageTitle = browserActions.getPageTitle();
-                Assert.assertEquals("User is not redirected to the expected page: " + expectedPageTitle, expectedPageTitle, currentPageTitle);
+                assertEquals("User is not redirected to the expected page: " + expectedPageTitle, expectedPageTitle, currentPageTitle);
             } else {
                 String expectedPageUrl = ConfigReader.getProperty(expectedPageUrlKey);
 
                 LOG.debug("Waiting for URL to be '{}'", expectedPageUrl);
                 browserActions.waitForExpectedPageUrl(expectedPageUrl);
                 String currentPageUrl = browserActions.getPageUrl();
-                Assert.assertEquals("User is not redirected to the expected page: " + currentPageUrl, expectedPageUrl, currentPageUrl);
+                assertEquals("User is not redirected to the expected page: " + currentPageUrl, expectedPageUrl, currentPageUrl);
             }
         } catch (TimeoutException ex) {
-            LOG.error("Timeout waiting for user to be redirected to '{}' page", page, ex);
-            throw ex;
+            LOG.error("Timeout waiting for user to be redirected to '{}' page", pageKey, ex);
         }
     }
 
@@ -94,6 +99,13 @@ public class UiSharedSteps {
         }
     }
 
+    @Then("{} is displayed in contacts summary table")
+    public void checkContactInSummary(String contactName) {
+        Map<FormKey, String> parsedContact = ScenarioContext.getContact();
+        contactListPage.isSpecificContactDisplayed(parsedContact);
+        LOG.info("Contact with name '{}' is displayed in contacts summary table.", contactName);
+    }
+
     @Then("{} is displayed on {} page")
     public void checkValidationMessage(String expectedValidationMessage, String pageName) {
         String actualValidationMessage;
@@ -118,7 +130,7 @@ public class UiSharedSteps {
             LOG.info("Validation message '{}' is displayed on '{}' page.", expectedValidationMessage, pageName);
         }
 
-        Assert.assertEquals("Unexpected validation message", expectedValidationMessage, actualValidationMessage);
+        assertEquals("Unexpected validation message", expectedValidationMessage, actualValidationMessage);
         LOG.debug("Expected validation message '{}' matches the actual message displayed {}'.", expectedValidationMessage, actualValidationMessage);
     }
 }

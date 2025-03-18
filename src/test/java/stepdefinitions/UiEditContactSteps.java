@@ -8,7 +8,11 @@ import org.apache.logging.log4j.Logger;
 import pageobjects.AddEditContactPage;
 import pageobjects.ContactDetailsPage;
 import pageobjects.ContactListPage;
-import java.util.Arrays;
+import scenariocontext.FormKey;
+import scenariocontext.ScenarioContext;
+import utils.ContactHelper;
+
+import java.util.Map;
 
 public class UiEditContactSteps {
 
@@ -37,36 +41,12 @@ public class UiEditContactSteps {
 
     @When("User updates contact providing {}")
     public void updateExistingContact(String contactDetails) {
-        String[] details = contactDetails.split(",", -1);
+        Map<FormKey, String> parsedContact = ContactHelper.parseContactDetails(contactDetails);
+        ScenarioContext.saveContact(parsedContact);
 
-        String firstName = details[0].trim();
-        String lastName = details[1].trim();
-        String dateOfBirth = details[2].trim();
-        String email = details[3].trim();
-        String phone = details[4].trim();
-        String streetAddr1 = details[5].trim();
-        String streetAddr2 = details[6].trim();
-        String city = details[7].trim();
-        String stateOrProvince = details[8].trim();
-        String postalCode = details[9].trim();
-        String country = details[10].trim();
-
-        boolean allOptionalFieldsEmpty = Arrays.stream(details, 2, details.length)
-                .allMatch(String::isBlank);
-
-        if (allOptionalFieldsEmpty) {
-            LOG.info("Updating contact's required fields.");
-            addEditContactPage.addEditContact(firstName, lastName);
-            LOG.info("Contact name is updated to '{}'.", firstName + " " + lastName);
-        } else {
-            LOG.info("Updating contact's required and optional fields.");
-            addEditContactPage.addEditContact(firstName, lastName, dateOfBirth, email, phone,
-                    streetAddr1, streetAddr2, city, stateOrProvince,
-                    postalCode, country);
-            LOG.info("Contact is submitted with the following name '{}' and optional info: '{}'.",
-                    firstName + " " + lastName,
-                    dateOfBirth + " " + email + " " + phone + " " + streetAddr1 + " " + streetAddr2 + " " + city + " " + stateOrProvince + " " + postalCode + " " + country);
-        }
+        LOG.info("Updating a contact providing {}", parsedContact.toString());
+        addEditContactPage.addEditContact(parsedContact);
+        LOG.info("Contact is submitted.");
     }
 
     @And("User clicks [Return to Contact List] button on Contact Details page")

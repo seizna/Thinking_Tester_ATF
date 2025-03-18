@@ -17,7 +17,7 @@ public class DbSteps {
 
     @And("User with email under test is present in DB")
     public void insertRegisteredUser() {
-        String email = getContext(ContextKey.EMAIL).toString();
+        String email = getContext(ContextKey.USER_EMAIL);
         Users existingUser = dbActions.selectUserByEmail(email);
 
             if (existingUser != null) {

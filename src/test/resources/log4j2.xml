@@ -1,19 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
     <Appenders>
-        <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss}  %-5level %c{1} - %msg%n"/>
+        <!-- Console Output -->
+        <Console name="ConsoleLogs" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5level %c{1} - %msg%n"/>
         </Console>
-        <File name="File" fileName="logs/application.log" append="true">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss}  %-5level %c{1} - %msg%n"/>
+        <!-- All Application Logs -->
+        <File name="AppLogs" fileName="logs/application.log" append="true">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5level %c{1} - %msg%n"/>
         </File>
+        <!-- Scenario Based Logs -->
+        <Routing name="ScenarioLogs">
+            <Routes pattern="$${ctx:scenarioName}">
+                <Route>
+                    <File name="ScenarioFile" fileName="logs/${ctx:scenarioName}.log" append="false">
+                        <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} %-5level %c{1} - %msg%n"/>
+                    </File>
+                </Route>
+            </Routes>
+        </Routing>
     </Appenders>
+
     <Loggers>
+        <!-- Manage Logs for Auxiliary Libraries -->
         <Logger name="org.hibernate" level="error"/>
         <Logger name="org.openqa.selenium" level="error"/>
+        <!-- Manage Logs for Appenders -->
         <Root level="info">
-            <AppenderRef ref="Console"/>
-            <AppenderRef ref="File"/>
+            <AppenderRef ref="ConsoleLogs"/>
+            <AppenderRef ref="AppLogs"/>
+            <AppenderRef ref="ScenarioLogs"/>
         </Root>
     </Loggers>
 </Configuration>
