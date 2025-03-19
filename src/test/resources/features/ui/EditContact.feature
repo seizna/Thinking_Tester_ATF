@@ -1,10 +1,7 @@
 Feature: Edit Contact
 
   Background:
-    Given User is on Contact List page
-    And At least one contact exists in contacts summary table
-    And User selects existing contact to view the Contact Details
-    And User clicks [Edit Contact] button on Contact Details page
+    Given User is on Edit Contact page
 
   @UI @TakeScreenshot
   Scenario Outline: Check that user can update contact's info
@@ -20,7 +17,7 @@ Feature: Edit Contact
   @UI @TakeScreenshot
   Scenario Outline: Verify system validates user input on Edit Contact page
     When User updates contact providing <invalid Contact Details>
-    Then <Validation message> is displayed on Add Contact page
+    Then <Validation message> is displayed on Edit Contact page
     Examples:
       | invalid Contact Details                                                             | Validation message                                                                                                                          |
       | , , , , , , , , , ,                                                                 | Validation failed: lastName: Path `lastName` is required., firstName: Path `firstName` is required.                                         |

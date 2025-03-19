@@ -5,12 +5,17 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.Assert;
+import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.TimeoutException;
 import pageobjects.*;
+import scenariocontext.FormKey;
+import scenariocontext.ScenarioContext;
 import utils.ConfigReader;
-import java.util.HashMap;
+import utils.PageKey;
+
 import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
 
 public class UiSharedSteps {
 
@@ -26,45 +31,42 @@ public class UiSharedSteps {
     @Given("User navigates to the Login page")
     public void navigateToLoginPage() {
         try {
-            String expectedTitle = "Contact List App";
             browserActions.navigateTo(ConfigReader.getProperty("login.url"));
-            String actualTitle = browserActions.getPageTitle();
-            Assert.assertEquals("Login page title mismatch.", expectedTitle, actualTitle);
-        } catch (Exception ex) {
-            LOG.error("Failed to navigate to Login page:" + ex.getMessage());
+        } catch (InvalidArgumentException ex) {
+            LOG.error("Failed to navigate to Login page. Make sure the login URL is valid. Exception details: {}", ex.getMessage());
             throw ex;
         }
     }
 
     @Then("User is redirected to {} page")
-    public void checkUserRedirectToExpectedPage(String scenarioPageTitle) {
-        String expectedPageTitle = getExpectedPageTitle(scenarioPageTitle);
+    public void checkUserRedirectToExpectedPage(String scenarioPage) {
+        PageKey pageKey = PageKey.fromScenarioKey(scenarioPage);
 
-        if (expectedPageTitle == null) {
-            LOG.error("Unknown page title: {}", scenarioPageTitle);
-            throw new IllegalArgumentException("Unknown page: " + scenarioPageTitle);
+        if (pageKey == null) {
+            LOG.error("Unknown page identifier: {}", scenarioPage);
+            throw new IllegalArgumentException("Unknown page: " + scenarioPage);
         }
+
+        String expectedPageTitle = pageKey.getPageTitle();
+        String expectedPageUrlKey = pageKey.getPageUrlKey();
 
         try {
-            LOG.debug("Waiting for page title to be '{}'", expectedPageTitle);
-            browserActions.waitForPageToLoad(expectedPageTitle);
+            if (expectedPageTitle != null && !expectedPageTitle.isEmpty()) {
+                LOG.debug("Waiting for page title to be '{}'", expectedPageTitle);
+                browserActions.waitForExpectedPageTitle(expectedPageTitle);
+                String currentPageTitle = browserActions.getPageTitle();
+                assertEquals("User is not redirected to the expected page: " + expectedPageTitle, expectedPageTitle, currentPageTitle);
+            } else {
+                String expectedPageUrl = ConfigReader.getProperty(expectedPageUrlKey);
+
+                LOG.debug("Waiting for URL to be '{}'", expectedPageUrl);
+                browserActions.waitForExpectedPageUrl(expectedPageUrl);
+                String currentPageUrl = browserActions.getPageUrl();
+                assertEquals("User is not redirected to the expected page: " + currentPageUrl, expectedPageUrl, currentPageUrl);
+            }
         } catch (TimeoutException ex) {
-            LOG.error("Timeout waiting for user to be redirected to '{}' page", expectedPageTitle, ex);
+            LOG.error("Timeout waiting for user to be redirected to '{}' page", pageKey, ex);
         }
-
-        String currentPageTitle = browserActions.getPageTitle();
-        Assert.assertEquals("User is not redirected to the expected page: " + expectedPageTitle, expectedPageTitle, currentPageTitle);
-    }
-
-    private String getExpectedPageTitle(String pageTitle) {
-        Map<String, String> expectedPageMap = new HashMap<>();
-        expectedPageMap.put("Contact List App", "Contact List App");
-        expectedPageMap.put("Add User", "Add User");
-        expectedPageMap.put("Contact List", "My Contacts");
-        expectedPageMap.put("Add Contact", "Add Contact");
-        expectedPageMap.put("Contact Details", "Contact Details");
-
-        return expectedPageMap.get(pageTitle);
     }
 
     public void checkUiElements(String pageName) {
@@ -80,7 +82,7 @@ public class UiSharedSteps {
             case "Add User":
                 arePageElementsDisplayed = addUserPage.areAllAddUserElementsDisplayed();
                 break;
-            case "Add Contact":
+            case "Add Contact", "Edit Contact":
                 arePageElementsDisplayed = addEditContactPage.areAllContactElementsDisplayed();
                 break;
             case "Contact Details":
@@ -94,6 +96,13 @@ public class UiSharedSteps {
         }
     }
 
+    @Then("{} is displayed in contacts summary table")
+    public void checkContactInSummary(String contactName) {
+        Map<FormKey, String> parsedContact = ScenarioContext.getContact();
+        contactListPage.isSpecificContactDisplayed(parsedContact);
+        LOG.info("Contact with name '{}' is displayed in contacts summary table.", contactName);
+    }
+
     @Then("{} is displayed on {} page")
     public void checkValidationMessage(String expectedValidationMessage, String pageName) {
         String actualValidationMessage;
@@ -105,7 +114,7 @@ public class UiSharedSteps {
             case "Add User":
                 actualValidationMessage = addUserPage.getValidationMessageText();
                 break;
-            case "Add Contact":
+            case "Add Contact", "Edit Contact":
                 actualValidationMessage = addEditContactPage.getValidationMessageText();
                 break;
             default:
@@ -118,7 +127,7 @@ public class UiSharedSteps {
             LOG.info("Validation message '{}' is displayed on '{}' page.", expectedValidationMessage, pageName);
         }
 
-        Assert.assertEquals("Unexpected validation message", expectedValidationMessage, actualValidationMessage);
+        assertEquals("Unexpected validation message", expectedValidationMessage, actualValidationMessage);
         LOG.debug("Expected validation message '{}' matches the actual message displayed {}'.", expectedValidationMessage, actualValidationMessage);
     }
 }

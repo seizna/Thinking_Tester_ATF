@@ -8,10 +8,10 @@ public class UserFactory {
 
     public static Users createUser() {
         Users user = new Users();
-        user.setFirstName(getContext(ContextKey.FIRST_NAME).toString());
-        user.setLastName(getContext(ContextKey.LAST_NAME).toString());
-        user.setEmail(getContext(ContextKey.EMAIL).toString());
-        user.setPassword(getContext(ContextKey.ENCRYPTED_PASSWORD).toString());
+        user.setFirstName(getContext(ContextKey.USER_FIRST_NAME));
+        user.setLastName(getContext(ContextKey.USER_LAST_NAME));
+        user.setEmail(getContext(ContextKey.USER_EMAIL));
+        user.setPassword(getContext(ContextKey.USER_ENCRYPTED_PASSWORD));
         user.setCreatedAt(LocalDateTime.now());
         return user;
     }

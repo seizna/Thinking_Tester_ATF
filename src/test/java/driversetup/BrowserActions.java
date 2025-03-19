@@ -1,7 +1,6 @@
 package driversetup;
 
 import org.openqa.selenium.support.ui.ExpectedConditions;
-
 import static driversetup.WebDriverManager.*;
 
 public class BrowserActions {
@@ -10,16 +9,28 @@ public class BrowserActions {
         getDriver();
     }
 
-    public String getPageTitle() {
-        return getDriver().getTitle();
-    }
-
     public void navigateTo(String url) {
         getDriver().navigate().to(url);
     }
 
-    public void waitForPageToLoad(String expectedPageTitle) {
+    public String getPageTitle() {
+        return getDriver().getTitle();
+    }
+
+    public void waitForExpectedPageTitle(String expectedPageTitle) {
         getWait().until(ExpectedConditions.titleIs(expectedPageTitle));
+    }
+
+    public String getPageUrl() {
+        return getDriver().getCurrentUrl();
+    }
+
+    public void waitForExpectedPageUrl(String expectedPageUrl) {
+        getWait().until(ExpectedConditions.urlToBe(expectedPageUrl));
+    }
+
+    public void acceptBrowserAlert() {
+        getDriver().switchTo().alert().accept();
     }
 
     public void closeBrowser() {

@@ -26,28 +26,8 @@ public class ContactDetailsPage {
     @FindBy(id = "contactDetails")
     private WebElement contactDetailsForm;
 
-    @FindBy(id = "firstName")
-    private WebElement firstName;
-
-    @FindBy(id = "lastName")
-    private WebElement lastName;
-
-
     public ContactDetailsPage() {
         PageFactory.initElements(getDriver(), this);
-    }
-
-
-    public boolean isHeaderDisplayed() {
-        return header.isDisplayed();
-    }
-
-    public String getHeaderText() {
-        if (isHeaderDisplayed()) {
-            return header.getText();
-        } else {
-            return "";
-        }
     }
 
     public void clickEditContactButton() {
@@ -62,8 +42,8 @@ public class ContactDetailsPage {
         returnToContactListButton.click();
     }
 
-    public void clickLogoutButton() {
-        logoutButton.click();
+    public WebElement getContactDetailsForm() {
+        return contactDetailsForm;
     }
 
     public boolean areAllContactDetailsElementsDisplayed() {

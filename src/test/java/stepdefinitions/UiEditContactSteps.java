@@ -8,9 +8,11 @@ import org.apache.logging.log4j.Logger;
 import pageobjects.AddEditContactPage;
 import pageobjects.ContactDetailsPage;
 import pageobjects.ContactListPage;
-import java.util.Arrays;
+import scenariocontext.FormKey;
+import scenariocontext.ScenarioContext;
+import utils.ContactHelper;
 
-import static org.junit.Assert.assertTrue;
+import java.util.Map;
 
 public class UiEditContactSteps {
 
@@ -21,69 +23,35 @@ public class UiEditContactSteps {
     ContactDetailsPage contactDetailsPage = new ContactDetailsPage();
     AddEditContactPage addEditContactPage = new AddEditContactPage();
 
-    @Given("User is on Contact List page")
-    public void accessContactListPage() throws Exception {
+    @Given("User is on Edit Contact page")
+    public void accessEditContactPage() throws Exception {
         sharedSteps.navigateToLoginPage();
         loginSteps.loginUserWithValidCredentials();
         sharedSteps.checkUiElements("Contact List");
-        LOG.info("Contact List page accessed and has all required elements.");
-    }
-
-    @And("At least one contact exists in contacts summary table")
-    public void checkExistingContactInSummary() {
-        assertTrue("Contacts summary table is empty.", contactListPage.hasAtLeastOneContact());
-        LOG.info("Summary table has at least one contact.");
-    }
-
-    @And("User selects existing contact to view the Contact Details")
-    public void selectExistingContact() {
         contactListPage.selectExistingContact();
         LOG.info("Existing contact is selected from the summary table.");
-    }
-
-    @And("User clicks [Edit Contact] button on Contact Details page")
-    public void clickEditContact() {
+        sharedSteps.checkUserRedirectToExpectedPage("Contact Details");
+        sharedSteps.checkUiElements("Contact Details");
         contactDetailsPage.clickEditContactButton();
-        LOG.info("User clicks Edit Contact button on Contact Details page.");
+        LOG.info("User enters Edit mode by clicking [Edit Contact] button.");
+        sharedSteps.checkUserRedirectToExpectedPage("Edit Contact");
+        sharedSteps.checkUiElements("Edit Contact");
+        LOG.info("Edit Contact page accessed and has all required elements.");
     }
 
     @When("User updates contact providing {}")
     public void updateExistingContact(String contactDetails) {
-        String[] details = contactDetails.split(",", -1);
+        Map<FormKey, String> parsedContact = ContactHelper.parseContactDetails(contactDetails);
+        ScenarioContext.saveContact(parsedContact);
 
-        String firstName = details[0].trim();
-        String lastName = details[1].trim();
-        String dateOfBirth = details[2].trim();
-        String email = details[3].trim();
-        String phone = details[4].trim();
-        String streetAddr1 = details[5].trim();
-        String streetAddr2 = details[6].trim();
-        String city = details[7].trim();
-        String stateOrProvince = details[8].trim();
-        String postalCode = details[9].trim();
-        String country = details[10].trim();
-
-        boolean allOptionalFieldsEmpty = Arrays.stream(details, 2, details.length)
-                .allMatch(String::isBlank);
-
-        if (allOptionalFieldsEmpty) {
-            LOG.info("Updating contact's required fields.");
-            addEditContactPage.addEditContact(firstName, lastName);
-            LOG.info("Contact name is updated to {}.", firstName + " " + lastName);
-        } else {
-            LOG.info("Updating contact's required and optional fields.");
-            addEditContactPage.addEditContact(firstName, lastName, dateOfBirth, email, phone,
-                    streetAddr1, streetAddr2, city, stateOrProvince,
-                    postalCode, country);
-            LOG.info("Contact is submitted with the following name '{}' and optional info: '{}'.",
-                    firstName + " " + lastName,
-                    dateOfBirth + " " + email + " " + phone + " " + streetAddr1 + " " + streetAddr2 + " " + city + " " + stateOrProvince + " " + postalCode + " " + country);
-        }
+        LOG.info("Updating a contact providing {}", parsedContact.toString());
+        addEditContactPage.addEditContact(parsedContact);
+        LOG.info("Contact is submitted.");
     }
 
     @And("User clicks [Return to Contact List] button on Contact Details page")
     public void clickReturnToContactList() {
         contactDetailsPage.clickReturnToContactListButton();
-        LOG.info("User clicks Return to Contact List button on Contact Details page.");
+        LOG.info("User clicks [Return to Contact List] button on Contact Details page.");
     }
 }

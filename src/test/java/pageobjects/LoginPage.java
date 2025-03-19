@@ -12,7 +12,7 @@ import static driversetup.WebDriverManager.getWait;
 
 public class LoginPage {
 
-    @FindBy(css = "header h1")
+    @FindBy(css = "h1")
     private WebElement header;
 
     @FindBy(id = "email")
@@ -30,22 +30,8 @@ public class LoginPage {
     @FindBy(id = "error")
     private WebElement validationMessage;
 
-
     public LoginPage() {
         PageFactory.initElements(getDriver(), this);
-    }
-
-
-    public boolean isHeaderDisplayed() {
-        return header.isDisplayed();
-    }
-
-    public String getHeaderText() {
-        if (isHeaderDisplayed()) {
-            return header.getText();
-        } else {
-            return "";
-        }
     }
 
     public void setEmail(String email) {

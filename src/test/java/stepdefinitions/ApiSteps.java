@@ -18,9 +18,9 @@ public class ApiSteps {
     ApiRequestMethods apiRequestMethods = new ApiRequestMethods();
     DbActions dbActions = new DbActions();
     Users user = new Users();
-    Response apiResponse;
-    int actualStatusCode;
-    String token = "";
+    private Response apiResponse;
+    private int actualStatusCode;
+    private String token = "";
 
     @When("User sends authentication request providing valid email and password")
     public void authorizeUser() throws Exception {

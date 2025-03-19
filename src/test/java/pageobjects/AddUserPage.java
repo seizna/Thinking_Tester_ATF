@@ -12,7 +12,7 @@ import static driversetup.WebDriverManager.getWait;
 
 public class AddUserPage {
 
-    @FindBy(css = "header h1")
+    @FindBy(css = "h1")
     private WebElement header;
 
     @FindBy(id = "firstName")
@@ -36,11 +36,9 @@ public class AddUserPage {
     @FindBy(id = "error")
     private WebElement validationMessage;
 
-
     public AddUserPage() {
         PageFactory.initElements(getDriver(), this);
     }
-
 
     public void setFirstName(String firstName) {
         this.firstName.sendKeys(firstName);
@@ -60,10 +58,6 @@ public class AddUserPage {
 
     public void clickSubmitButton() {
         submitButton.click();
-    }
-
-    public void clickCancelButton() {
-        cancelButton.click();
     }
 
     public boolean isValidationMessageDisplayed() {
