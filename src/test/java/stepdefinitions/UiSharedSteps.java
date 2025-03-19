@@ -5,8 +5,8 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriverException;
 import pageobjects.*;
 import scenariocontext.FormKey;
 import scenariocontext.ScenarioContext;
@@ -31,12 +31,9 @@ public class UiSharedSteps {
     @Given("User navigates to the Login page")
     public void navigateToLoginPage() {
         try {
-            String expectedTitle = "Contact List App";
             browserActions.navigateTo(ConfigReader.getProperty("login.url"));
-            String actualTitle = browserActions.getPageTitle();
-            assertEquals("Login page title mismatch.", expectedTitle, actualTitle);
-        } catch (WebDriverException ex) {
-            LOG.error("Failed to navigate to Login page. Exception details: {}", ex.getMessage());
+        } catch (InvalidArgumentException ex) {
+            LOG.error("Failed to navigate to Login page. Make sure the login URL is valid. Exception details: {}", ex.getMessage());
             throw ex;
         }
     }

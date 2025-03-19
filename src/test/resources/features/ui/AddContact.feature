@@ -36,5 +36,3 @@ Feature: Add Contact
       | first name, last name, , , , , , , , 0,                                             | Contact validation failed: postalCode: Postal code is invalid                                                                                      |
       | first name, last name, , , , , , , , 12345678910,                                   | Contact validation failed: postalCode: Path `postalCode` (`12345678910`) is longer than the maximum allowed length (10).                           |
       | first name, last name, , , , , , , , , Country name is way above allowed max length | Contact validation failed: country: Path `country` (`Country name is way above allowed max length`) is longer than the maximum allowed length (40). |
-
-    #Same test using data table using data faker

@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 public class WebDriverManager {
-    private static WebDriverManager manager;
+    private static WebDriverManager instance;
     private final WebDriver DRIVER;
     private static WebDriverWait wait;
 
@@ -19,16 +19,16 @@ public class WebDriverManager {
     }
 
     public static WebDriver getDriver() {
-        if (manager == null) {
-            manager = new WebDriverManager();
+        if (instance == null) {
+            instance = new WebDriverManager();
         }
-        return manager.DRIVER;
+        return instance.DRIVER;
     }
 
     public static void closeDriver() {
-        if (manager != null) {
-            manager.DRIVER.quit();
-            manager = null;
+        if (instance != null) {
+            instance.DRIVER.quit();
+            instance = null;
         }
     }
 
