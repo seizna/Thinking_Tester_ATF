@@ -98,4 +98,16 @@ public class ContactHelper {
 
         return contactMappingInSummary;
     }
+
+    public static Map<String,String> extractUpdatedFieldsFromResponseBody(Map<String, String> fieldsToUpdate, Map<String, String> responseBody){
+        Map<String, String> convertedResponseBody = new HashMap<>();
+
+        for (Map.Entry<String, String> entry : fieldsToUpdate.entrySet()) {
+            String fieldsToUpdateKey = entry.getKey();
+            String apiResponseValue = responseBody.get(fieldsToUpdateKey);
+            convertedResponseBody.put(fieldsToUpdateKey, apiResponseValue);
+        }
+
+        return convertedResponseBody;
+    }
 }

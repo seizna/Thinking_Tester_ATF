@@ -22,7 +22,7 @@ import java.util.UUID;
 
 public class Hooks {
 
-    private final Logger LOG = LogManager.getLogger(Hooks.class);
+    private static final Logger LOG = LogManager.getLogger(Hooks.class);
     BrowserActions browserActions = new BrowserActions();
 
     @Before(order = 0)

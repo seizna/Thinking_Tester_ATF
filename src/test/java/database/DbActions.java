@@ -10,7 +10,7 @@ import org.hibernate.Transaction;
 
 public class DbActions {
 
-    private final Logger LOG = LogManager.getLogger(DbActions.class);
+    private static final Logger LOG = LogManager.getLogger(DbActions.class);
     Session session = HibernateUtil.getSessionFactory().openSession();
     Transaction transaction = null;
 

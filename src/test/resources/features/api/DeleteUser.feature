@@ -3,7 +3,6 @@ Feature: Delete User
   @API
   Scenario: Verify that registered user can be successfully deleted
     Given User sends authentication request providing valid email and password
-    And Response returns status code 200
     When User sends a delete user request
     Then Response returns status code 200
     And User with email under test is removed from DB

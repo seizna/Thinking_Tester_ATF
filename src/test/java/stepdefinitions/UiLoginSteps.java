@@ -11,7 +11,7 @@ import utils.EncryptionUtils;
 
 public class UiLoginSteps {
 
-    private final Logger LOG = LogManager.getLogger(UiLoginSteps.class);
+    private static final Logger LOG = LogManager.getLogger(UiLoginSteps.class);
     LoginPage loginPage = new LoginPage();
     UiSharedSteps sharedSteps = new UiSharedSteps();
     DbActions dbActions = new DbActions();

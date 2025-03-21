@@ -19,7 +19,7 @@ import static org.junit.Assert.assertEquals;
 
 public class UiSharedSteps {
 
-    private final Logger LOG = LogManager.getLogger(UiSharedSteps.class);
+    private static final Logger LOG = LogManager.getLogger(UiSharedSteps.class);
     LoginPage loginPage = new LoginPage();
     AddUserPage addUserPage = new AddUserPage();
     ContactListPage contactListPage = new ContactListPage();

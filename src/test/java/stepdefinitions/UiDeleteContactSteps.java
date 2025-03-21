@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class UiDeleteContactSteps {
 
-    private final Logger LOG = LogManager.getLogger(UiDeleteContactSteps.class);
+    private static final Logger LOG = LogManager.getLogger(UiDeleteContactSteps.class);
     UiSharedSteps sharedSteps = new UiSharedSteps();
     UiLoginSteps loginSteps = new UiLoginSteps();
     ContactListPage contactListPage = new ContactListPage();
