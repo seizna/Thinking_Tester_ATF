@@ -12,7 +12,7 @@ import static scenariocontext.ScenarioContext.getContext;
 
 public class DbSteps {
 
-    private final Logger LOG = LogManager.getLogger(DbSteps.class);
+    private static final Logger LOG = LogManager.getLogger(DbSteps.class);
     DbActions dbActions = new DbActions();
 
     @And("User with email under test is present in DB")

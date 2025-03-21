@@ -12,7 +12,7 @@ import utils.EncryptionUtils;
 
 public class UiRegistrationSteps {
 
-    private final Logger LOG = LogManager.getLogger(UiRegistrationSteps.class);
+    private static final Logger LOG = LogManager.getLogger(UiRegistrationSteps.class);
     LoginPage loginPage = new LoginPage();
     AddUserPage addUserPage = new AddUserPage();
     UiSharedSteps sharedSteps = new UiSharedSteps();

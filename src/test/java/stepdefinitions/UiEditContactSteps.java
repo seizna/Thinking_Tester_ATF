@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class UiEditContactSteps {
 
-    private final Logger LOG = LogManager.getLogger(UiEditContactSteps.class);
+    private static final Logger LOG = LogManager.getLogger(UiEditContactSteps.class);
     UiSharedSteps sharedSteps = new UiSharedSteps();
     UiLoginSteps loginSteps = new UiLoginSteps();
     ContactListPage contactListPage = new ContactListPage();

@@ -9,13 +9,13 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class ConfigReader {
-    private final Logger LOG = LogManager.getLogger(ConfigReader.class);
-    private final Properties PROPERTIES = new Properties();
+    private static final Logger LOG = LogManager.getLogger(ConfigReader.class);
+    private final Properties properties = new Properties();
     private static ConfigReader configReader;
 
     private ConfigReader() {
         try (InputStream input = new FileInputStream("src/test/resources/config.properties")) {
-            PROPERTIES.load(input);
+            properties.load(input);
         } catch (IOException ex) {
             LOG.error("Error reading properties file: {}", ex.getMessage());
         }
@@ -25,6 +25,6 @@ public class ConfigReader {
         if (configReader == null) {
             configReader = new ConfigReader();
         }
-        return configReader.PROPERTIES.getProperty(key);
+        return configReader.properties.getProperty(key);
     }
 }
