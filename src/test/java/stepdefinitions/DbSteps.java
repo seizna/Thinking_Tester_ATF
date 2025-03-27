@@ -15,7 +15,7 @@ public class DbSteps {
     private static final Logger LOG = LogManager.getLogger(DbSteps.class);
     DbActions dbActions = new DbActions();
 
-    @And("User with email under test is present in DB")
+    @And("User with email under test is inserted in DB")
     public void insertRegisteredUser() {
         String email = getContext(ContextKey.USER_EMAIL);
         Users existingUser = dbActions.selectUserByEmail(email);

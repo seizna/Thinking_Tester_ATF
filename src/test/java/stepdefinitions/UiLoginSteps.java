@@ -2,7 +2,6 @@ package stepdefinitions;
 
 import database.DbActions;
 import database.Users;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,7 +16,7 @@ public class UiLoginSteps {
     DbActions dbActions = new DbActions();
     Users user = new Users();
 
-    @Given("User is on Login page")
+    @When("User is on Login page")
     public void accessLoginPage() {
         sharedSteps.navigateToLoginPage();
         sharedSteps.checkUiElements("Login");

@@ -18,4 +18,3 @@ Feature: User Login
       | seiz.nadea@gmail.com |          | Incorrect username or password |
       |                      | QAZws1!  | Incorrect username or password |
       | seiz.nadea           | QAZws1!  | Incorrect username or password |
-

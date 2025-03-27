@@ -8,26 +8,26 @@ import java.time.Duration;
 
 public class WebDriverManager {
     private static WebDriverManager instance;
-    private final WebDriver DRIVER;
+    private final WebDriver driver;
     private static WebDriverWait wait;
 
     private WebDriverManager() {
-        DRIVER = new ChromeDriver();
-        DRIVER.manage().window().maximize();
-        DRIVER.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-        wait = new WebDriverWait(DRIVER, Duration.ofSeconds(5));
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(5));
     }
 
     public static WebDriver getDriver() {
         if (instance == null) {
             instance = new WebDriverManager();
         }
-        return instance.DRIVER;
+        return instance.driver;
     }
 
     public static void closeDriver() {
         if (instance != null) {
-            instance.DRIVER.quit();
+            instance.driver.quit();
             instance = null;
         }
     }
