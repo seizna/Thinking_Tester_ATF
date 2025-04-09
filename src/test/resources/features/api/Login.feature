@@ -10,3 +10,11 @@ Feature: User Login
   Scenario: Check that non-existent user cannot perform successful authentication
     When User sends authentication request providing invalid invalidUser@example.com email and invalidPassword password
     Then Response returns status code 401
+
+
+  @API
+  Scenario: Check that user is unable to perform successful authentication providing invalid credentials
+    When User sends authentication request providing invalid credentials
+      | email                   | password        |
+      | invalidUser@example.com | invalidPassword |
+    Then Response returns status code 401

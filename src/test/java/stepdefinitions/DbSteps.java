@@ -3,7 +3,7 @@ package stepdefinitions;
 import database.DbActions;
 import database.UserFactory;
 import database.Users;
-import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import scenariocontext.ContextKey;
@@ -15,7 +15,7 @@ public class DbSteps {
     private static final Logger LOG = LogManager.getLogger(DbSteps.class);
     DbActions dbActions = new DbActions();
 
-    @And("User with email under test is inserted in DB")
+    @Then("User with email under test is inserted in DB")
     public void insertRegisteredUser() {
         String email = getContext(ContextKey.USER_EMAIL);
         Users existingUser = dbActions.selectUserByEmail(email);
@@ -29,7 +29,7 @@ public class DbSteps {
             }
     }
 
-    @And("User with email under test is removed from DB")
+    @Then("User with email under test is removed from DB")
     public void deleteRegisteredUser() {
         Users lastInsertedUser = dbActions.selectLastInsertedUser();
 

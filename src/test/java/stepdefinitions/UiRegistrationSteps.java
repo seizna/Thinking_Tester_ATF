@@ -1,5 +1,6 @@
 package stepdefinitions;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import org.apache.logging.log4j.LogManager;
@@ -9,6 +10,9 @@ import pageobjects.LoginPage;
 import scenariocontext.ContextKey;
 import scenariocontext.ScenarioContext;
 import utils.EncryptionUtils;
+
+import java.util.List;
+import java.util.Map;
 
 public class UiRegistrationSteps {
 
@@ -52,6 +56,33 @@ public class UiRegistrationSteps {
             ScenarioContext.setContext(ContextKey.USER_ENCRYPTED_PASSWORD, EncryptionUtils.encryptAesKey(password));
         } else {
             LOG.error("User registration failed.");
+        }
+    }
+
+    @When("User submits the registration form with the following data")
+    public void submitUserRegistrationForm(DataTable registrationDetails) throws Exception {
+        LOG.info("Attempting to register a new user.");
+        List<Map<String, String>> registrationDataList = registrationDetails.asMaps(String.class, String.class);
+        for (Map<String, String> registrationData : registrationDataList) {
+            String firstName = registrationData.get("firstName");
+            String lastName = registrationData.get("lastName");
+            String email = registrationData.get("email");
+            String password = registrationData.get("password");
+
+            if ("uniqueEmail".equals(email)) {
+                email = "user_" + System.currentTimeMillis() + "@example.com";
+                LOG.debug("Generated unique email for registration: {}", email);
+            }
+
+            LOG.info("Submitting registration form for user with the following email: {}.", email);
+            addUserPage.registerUser(firstName, lastName, email, password);
+
+            LOG.info("User is successfully registered.");
+            ScenarioContext.setContext(ContextKey.USER_FIRST_NAME, firstName);
+            ScenarioContext.setContext(ContextKey.USER_LAST_NAME, lastName);
+            ScenarioContext.setContext(ContextKey.USER_EMAIL, email);
+            ScenarioContext.setContext(ContextKey.USER_RAW_PASSWORD, password);
+            ScenarioContext.setContext(ContextKey.USER_ENCRYPTED_PASSWORD, EncryptionUtils.encryptAesKey(password));
         }
     }
 }

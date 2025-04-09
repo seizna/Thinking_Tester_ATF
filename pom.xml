@@ -23,7 +23,7 @@
         <allure.version>2.29.1</allure.version>
         <maven-cucumber-reporting.version>5.7.0</maven-cucumber-reporting.version>
         <webdrivermanager.version>5.9.2</webdrivermanager.version>
-        <selenium-devtools.version>4.30.0</selenium-devtools.version>
+        <selenium-devtools.version>4.31.0</selenium-devtools.version>
         <jackson-databind.version>2.18.2</jackson-databind.version>
         <hibernate.version>6.5.2.Final</hibernate.version>
         <mysql.version>8.0.33</mysql.version>
@@ -143,7 +143,7 @@
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-devtools-v134</artifactId>
+            <artifactId>selenium-devtools-v135</artifactId>
             <version>${selenium-devtools.version}</version>
         </dependency>
         <dependency>

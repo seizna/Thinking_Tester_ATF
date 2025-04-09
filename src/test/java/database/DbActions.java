@@ -35,7 +35,7 @@ public class DbActions {
             LOG.info("User with the following email {} retrieved from DB", user.getEmail());
             return user;
         } catch (NoResultException ex) {
-            LOG.error("User with email {} not found in the DB.", email);
+            LOG.warn("User with email {} not found in the DB.", email);
             return null;
         }
     }

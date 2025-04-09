@@ -4,7 +4,8 @@ import api.ApiRequestMethods;
 import database.DbActions;
 import database.Users;
 import datafaker.DataFaker;
-import io.cucumber.java.en.And;
+import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
@@ -33,7 +34,7 @@ public class ApiSteps {
     Map<String, Object> contactUnderTest;
     Map<String, String> fieldsToUpdate;
 
-    @When("User sends authentication request providing valid email and password")
+    @Given("User sends authentication request providing valid email and password")
     public void authorizeUser() throws Exception {
         LOG.info("Attempting to authorize registered user.");
 
@@ -53,7 +54,7 @@ public class ApiSteps {
         }
     }
 
-    @And("Response body contains user's email")
+    @Then("Response body contains user's email")
     public void validateUserAuthResponse() {
         String expectedUserEmail = user.getEmail();
         String actualUserEmail = apiResponse.jsonPath().getString("user.email");
@@ -69,12 +70,27 @@ public class ApiSteps {
         LOG.info("Authentication response received with status code: {}", actualStatusCode);
     }
 
-    @When("User does not send authentication request")
+    @When("User sends authentication request providing invalid credentials")
+    public void authorizeUser(DataTable invalidAuthCredentials) {
+        LOG.info("Attempting to authorize user providing invalid credentials.");
+
+        List<Map<String, String>> authDataList = invalidAuthCredentials.asMaps(String.class, String.class);
+        for (Map<String, String> authData : authDataList) {
+            String email = authData.get("email");
+            String password = authData.get("password");
+
+            apiResponse = apiRequestMethods.authorizationRequest(ConfigReader.getProperty("auth.endpoint"), email, password);
+            actualStatusCode = apiResponse.getStatusCode();
+            LOG.info("Authentication response received with the following status code: {}", actualStatusCode);
+        }
+    }
+
+    @Given("User does not send authentication request")
     public void skipUserAuthorization() {
         LOG.info("User authentication is skipped.");
     }
 
-    @And("Contact's under test ID is retrieved from Contact List")
+    @Given("Contact's under test ID is retrieved from Contact List")
     public void retrieveContactIdFromList() {
         LOG.info("Retrieving the list of contacts.");
         apiResponse = apiRequestMethods.getRequest(ConfigReader.getProperty("getContactList.endpoint"), token);
@@ -100,7 +116,7 @@ public class ApiSteps {
         LOG.info("Patch contact response received with status code: {}.", actualStatusCode);
     }
 
-    @And("Response body contains updated contact info")
+    @Then("Response body contains updated contact info")
     public void validatePatchContactResponse() {
         Map<String, String> responseBody = apiResponse.jsonPath().getMap("$");
         Map<String, String> convertedResponseBody = ContactHelper.extractUpdatedFieldsFromResponseBody(fieldsToUpdate, responseBody);
@@ -121,7 +137,7 @@ public class ApiSteps {
         LOG.info("Delete user response received with status code: {}", actualStatusCode);
     }
 
-    @And("Response body contains {} message")
+    @Then("Response body contains {} message")
     public void validateDeleteUserResponse(String expectedErrorMessage) {
         String actualErrorMessage = apiResponse.jsonPath().getString("error");
         assertEquals("Unexpected error message.", expectedErrorMessage, actualErrorMessage);
