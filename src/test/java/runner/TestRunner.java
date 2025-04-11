@@ -12,8 +12,8 @@ import org.junit.runner.RunWith;
                 "html:target/cucumber-reports/cucumber.html",
                 "json:target/allure-results/cucumber.json",
                 "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
-        },
-        tags = "@DemoRun"
+        }
+//        tags = "@DemoRun"
 )
 
 public class TestRunner {

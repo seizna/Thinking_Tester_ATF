@@ -57,7 +57,7 @@ public class AddUserPage {
     }
 
     public void clickSubmitButton() {
-        submitButton.click();
+        this.submitButton.click();
     }
 
     public boolean isValidationMessageDisplayed() {

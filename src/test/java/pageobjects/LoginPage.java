@@ -43,11 +43,11 @@ public class LoginPage {
     }
 
     public void clickSubmitButton() {
-        submitButton.click();
+        this.submitButton.click();
     }
 
     public void clickSignUpButton() {
-        signUpButton.click();
+        this.signUpButton.click();
     }
 
     public boolean isValidationMessageDisplayed() {
