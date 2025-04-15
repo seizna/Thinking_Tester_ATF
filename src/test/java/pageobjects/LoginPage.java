@@ -81,5 +81,10 @@ public class LoginPage {
         setPassword(password);
         clickSubmitButton();
     }
+
+    public void clearLoginForm(){
+        email.clear();
+        password.clear();
+    }
 }
 

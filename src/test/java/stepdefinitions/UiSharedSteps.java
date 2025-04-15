@@ -127,7 +127,7 @@ public class UiSharedSteps {
             LOG.info("Validation message '{}' is displayed on '{}' page.", expectedValidationMessage, pageName);
         }
 
-        assertEquals("Unexpected validation message", expectedValidationMessage, actualValidationMessage);
+        assertEquals("Unexpected validation message.", expectedValidationMessage, actualValidationMessage);
         LOG.debug("Expected validation message '{}' matches the actual message displayed {}'.", expectedValidationMessage, actualValidationMessage);
     }
 }

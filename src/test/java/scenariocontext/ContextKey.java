@@ -1,6 +1,6 @@
 package scenariocontext;
 
-public enum ContextKey {
+public enum ContextKey implements ParentKey {
     USER_FIRST_NAME,
     USER_LAST_NAME,
     USER_EMAIL,

@@ -63,10 +63,9 @@ public class Hooks {
         LOG.debug("Dummy Before hook for API");
     }
 
-    @After(order = 1, value = "@UI")
-    public void closeBrowser() {
-        browserActions.closeBrowser();
-        LOG.debug("Browser is closed.");
+    @After(order = 3, value = "@API")
+    public void dummyApiAfter() {
+        LOG.debug("Dummy After hook for API");
     }
 
     @After(order = 2, value = "@DB")
@@ -75,9 +74,10 @@ public class Hooks {
         LOG.debug("Hibernate session closed.");
     }
 
-    @After(order = 3, value = "@API")
-    public void dummyApiAfter() {
-        LOG.debug("Dummy After hook for API");
+    @After(order = 1, value = "@UI")
+    public void closeBrowser() {
+        browserActions.closeBrowser();
+        LOG.debug("Browser is closed.");
     }
 
     @After(order = 0)
@@ -91,7 +91,7 @@ public class Hooks {
 
             Allure.addAttachment("Logs for: " + scenario.getName(), "text/plain", new FileInputStream(path), ".log");
         } catch (IOException ex) {
-            LOG.error("Could not attach log file: {}", ex.getMessage());
+            LOG.error("Could not create log file: {}", ex.getMessage());
         } finally {
             ThreadContext.clearAll();
         }

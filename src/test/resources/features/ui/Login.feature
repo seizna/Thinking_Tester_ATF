@@ -19,4 +19,18 @@ Feature: User Login
       |                      | QAZws1!  | Incorrect username or password |
       | seiz.nadea           | QAZws1!  | Incorrect username or password |
 
+  @UI @TakeScreenshot
+  Scenario: Verify that validation message is displayed when user attempts login with invalid credentials
+    When User attempts login with invalid credentials
+      | email                | password |
+      |                      |          |
+      | seiz.nadea@gmail.com |          |
+      |                      | QAZws1   |
+      | seiz.nadea           | QAZws1   |
+    Then Validation message is displayed
+      | validationMessage              |
+      | Incorrect username or password |
+      | Incorrect username or password |
+      | Incorrect username or password |
+      | Incorrect username or password |
 
