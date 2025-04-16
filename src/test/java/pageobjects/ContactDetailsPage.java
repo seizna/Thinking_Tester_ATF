@@ -31,19 +31,19 @@ public class ContactDetailsPage {
     }
 
     public void clickEditContactButton() {
-        editContactButton.click();
+        this.editContactButton.click();
     }
 
     public void clickDeleteContactButton() {
-        deleteContactButton.click();
+        this.deleteContactButton.click();
     }
 
     public void clickReturnToContactListButton() {
-        returnToContactListButton.click();
+        this.returnToContactListButton.click();
     }
 
     public WebElement getContactDetailsForm() {
-        return contactDetailsForm;
+        return this.contactDetailsForm;
     }
 
     public boolean areAllContactDetailsElementsDisplayed() {

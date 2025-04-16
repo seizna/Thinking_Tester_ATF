@@ -1,6 +1,5 @@
 package stepdefinitions;
 
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import org.apache.logging.log4j.LogManager;
@@ -49,7 +48,7 @@ public class UiEditContactSteps {
         LOG.info("Contact is submitted.");
     }
 
-    @And("User clicks [Return to Contact List] button on Contact Details page")
+    @When("User clicks [Return to Contact List] button on Contact Details page")
     public void clickReturnToContactList() {
         contactDetailsPage.clickReturnToContactListButton();
         LOG.info("User clicks [Return to Contact List] button on Contact Details page.");

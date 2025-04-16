@@ -1,6 +1,6 @@
 package scenariocontext;
 
-public enum FormKey {
+public enum FormKey implements ParentKey {
     CONTACT_FIRST_NAME,
     CONTACT_LAST_NAME,
     CONTACT_DATE_OF_BIRTH,

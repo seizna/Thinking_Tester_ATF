@@ -20,6 +20,5 @@
         <property name="hibernate.hikari.poolName">ATF_Test_Pool</property>
         <!-- Entity Mappings -->
         <mapping class="database.Users"/>
-
     </session-factory>
 </hibernate-configuration>

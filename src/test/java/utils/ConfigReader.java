@@ -10,10 +10,11 @@ import java.util.Properties;
 
 public class ConfigReader {
     private static final Logger LOG = LogManager.getLogger(ConfigReader.class);
-    private final Properties properties = new Properties();
+    private final Properties properties;
     private static ConfigReader configReader;
 
     private ConfigReader() {
+        properties = new Properties();
         try (InputStream input = new FileInputStream("src/test/resources/config.properties")) {
             properties.load(input);
         } catch (IOException ex) {

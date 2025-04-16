@@ -36,7 +36,7 @@ public class ContactListPage {
     }
 
     public void clickAddContactButton() {
-        addContactButton.click();
+        this.addContactButton.click();
     }
 
     public boolean areAllContactListElementsDisplayed() {

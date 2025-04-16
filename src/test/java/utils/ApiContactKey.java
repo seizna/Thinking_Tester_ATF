@@ -1,5 +1,13 @@
 package utils;
 
+/**
+ * The {@code ApiContactKey} enum holds keys for contact details used in API interactions.
+ *
+ * <p>Each enum constant represents a specific contact field and provides a corresponding field name as a string.</p>
+ *
+ * <p>Use {@link #getFieldName()} to retrieve the string representation of the contact field.</p>
+ */
+
 public enum ApiContactKey {
 
     FIRST_NAME("firstName"),

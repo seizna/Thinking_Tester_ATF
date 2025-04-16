@@ -5,23 +5,43 @@ import java.util.Map;
 
 public class ScenarioContext {
 
-    private static final Map<ContextKey, String> SCENARIO_CONTEXT = new HashMap<>();
-    private static final Map<FormKey, String> CONTACT = new HashMap<>();
+    private static ScenarioContext instance;
+    private final Map<ParentKey, String> globalContext;
+
+    private ScenarioContext() {
+        globalContext = new HashMap<>();
+    }
+
+    public static ScenarioContext getInstance() {
+        if (instance == null) {
+            instance = new ScenarioContext();
+        }
+        return instance;
+    }
 
     public static void setContext(ContextKey key, String value) {
-        SCENARIO_CONTEXT.put(key, value);
+        getInstance().globalContext.put(key, value);
     }
 
     public static String getContext(ContextKey key) {
-        return SCENARIO_CONTEXT.get(key);
+        return getInstance().globalContext.get(key);
     }
 
+
     public static void saveContact(Map<FormKey, String> parsedContact) {
-        CONTACT.clear();
-        CONTACT.putAll(parsedContact);
+        for (FormKey value : FormKey.values()) {
+            getInstance().globalContext.remove(value);
+        }
+        getInstance().globalContext.putAll(parsedContact);
     }
 
     public static Map<FormKey, String> getContact() {
-        return CONTACT;
+        Map<ParentKey, String> globalContext = getInstance().globalContext;
+        Map<FormKey, String> parsedContact = new HashMap<>();
+
+        for (FormKey value : FormKey.values()) {
+            parsedContact.put(value, globalContext.get(value));
+        }
+        return parsedContact;
     }
 }

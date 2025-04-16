@@ -7,7 +7,15 @@ Feature: User Registration
   Scenario: Successful User Registration
     When User registers with First Name: Jane, Last Name: Doe, Email: uniqueEmail and Password: TestUserRegistration1!
     Then User is redirected to Contact List page
-    And User with email under test is present in DB
+    And User with email under test is inserted in DB
+
+  @UI @DB @TakeScreenshot
+  Scenario: Check that user is able to register successfully using valid data
+    When User submits the registration form with the following data
+      | firstName | lastName | email       | password               |
+      | John      | Doe      | uniqueEmail | TestUserRegistration1! |
+    Then User is redirected to Contact List page
+    And User with email under test is inserted in DB
 
   @UI @TakeScreenshot
   Scenario Outline: Verify system validates user input on Add User page
@@ -22,4 +30,5 @@ Feature: User Registration
       | Jane                   | Doe                    | Jane.Doe@sena.com | JaneDoe                                                                                               | Email address is already in use                                                                                                                                                                              |
       | CheckMaximumCharacters | Doe                    | Jane.Doe@sena.com | JaneDoe                                                                                               | User validation failed: firstName: Path `firstName` (`CheckMaximumCharacters`) is longer than the maximum allowed length (20).                                                                               |
       | Jane                   | CheckMaximumCharacters | Jane.Doe@sena.com | JaneDoe                                                                                               | User validation failed: lastName: Path `lastName` (`CheckMaximumCharacters`) is longer than the maximum allowed length (20).                                                                                 |
+
 

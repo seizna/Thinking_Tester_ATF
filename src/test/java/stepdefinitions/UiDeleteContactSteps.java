@@ -1,8 +1,8 @@
 package stepdefinitions;
 
 import driversetup.BrowserActions;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,19 +36,16 @@ public class UiDeleteContactSteps {
         LOG.info("Contact Details page accessed and has all required elements.");
     }
 
-    @When("User clicks [Delete Contact] button on Contact Details page")
-    public void clickDeleteContact() {
+    @When ("User clicks [Delete Contact] button and confirms delete action by hitting [Ok] button on browser alert")
+    public void deleteContact() {
         Map<FormKey, String> contactDetails = PageHelper.parseContactDetailsForm(contactDetailsPage.getContactDetailsForm());
         ScenarioContext.saveContact(contactDetails);
+        LOG.info("Contact '{}' is about to be deleted.", contactDetails.toString());
         contactDetailsPage.clickDeleteContactButton();
-    }
-
-    @And("User confirms delete action by hitting [Ok] button on browser alert")
-    public void confirmDeleteContactAction() {
         browserActions.acceptBrowserAlert();
     }
 
-    @And("Deleted contact is not displayed in contacts summary table")
+    @Then("Deleted contact is not displayed in contacts summary table")
     public void checkDeletedContactInSummary() {
         Map<FormKey, String> contactDetails = ScenarioContext.getContact();
         contactListPage.isDeletedContactMissingInTable(contactDetails);

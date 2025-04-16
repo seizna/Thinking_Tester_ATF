@@ -33,6 +33,13 @@ import java.util.Base64;
 public class EncryptionUtils {
     static final String AES_KEY = "AES";
 
+    /**
+     * This method retrieves a Base64 encoded AES key from the configuration,
+     * decodes it, and creates a secret key for the AES algorithm. It then initializes
+     * a cipher in encryption mode, encrypts the raw password, and returns the encrypted
+     * data as a Base64 encoded string.</p>
+     */
+
     public static String encryptAesKey(String rawPassword) throws Exception {
         SecretKey key = new SecretKeySpec(Base64.getDecoder().decode(ConfigReader.getProperty("base64_encoded_key")), AES_KEY);
         Cipher cipher = Cipher.getInstance(AES_KEY);
@@ -40,6 +47,13 @@ public class EncryptionUtils {
         byte[] encryptedBytes = cipher.doFinal(rawPassword.getBytes());
         return Base64.getEncoder().encodeToString(encryptedBytes);
     }
+
+    /**
+     * This method retrieves a Base64 encoded AES key from the configuration,
+     * decodes it, and creates a secret key for the AES algorithm. It then initializes
+     * a cipher in decryption mode, decodes the Base64 encoded encrypted password,
+     * decrypts it, and returns the original raw password as a string.</p>
+     */
 
     public static String decryptAesKey(String encryptedPassword) throws Exception {
         SecretKey key = new SecretKeySpec(Base64.getDecoder().decode(ConfigReader.getProperty("base64_encoded_key")), AES_KEY);
